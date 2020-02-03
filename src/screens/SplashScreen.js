@@ -36,7 +36,6 @@ async componentDidMount() {
     const data = await this.performTimeConsumingTask();
     this.props.navigation.navigate('Login');
     
-  
   //This is where we will check if user data has been saved for auto login
 }
 

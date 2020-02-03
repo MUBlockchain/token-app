@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { BackHandler } from 'react-native';
-import { View, Text, StyleSheet, Image, Input, Icon, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, Input, Icon, Button, TextInput } from 'react-native';
 import { createAppContainer, SafeAreaView } from 'react-navigation';
 
 class LoginScreen extends React.Component {
@@ -46,6 +46,18 @@ class LoginScreen extends React.Component {
   render() {
     return (
       <SafeAreaView style={styles.viewStyles}>
+          <TextInput
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+            onChangeText={text => onChangeText(text)}
+            value={"Username"}
+          />
+
+          <TextInput
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+            onChangeText={text => onChangeText(text)}
+            value={"Password"}
+          />
+
           <Button
             title="Login"
             onPress={this.loginHandler}
