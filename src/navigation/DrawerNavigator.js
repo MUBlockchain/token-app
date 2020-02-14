@@ -4,9 +4,9 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import { Icon } from 'react-native-elements';
 import DrawerComponent from './DrawerComponent';
-import HomeScreen from '../../screens/HomeScreen';
-import RedeemScreen from '../../screens/RedeemScreen';
-import RewardsScreen from '../../screens/RewardsScreen';
+import HomeScreen from '../screens/HomeScreen';
+import RedeemScreen from '../screens/RedeemScreen';
+import RewardsScreen from '../screens/RewardsScreen';
 
 /**
  * Variables
@@ -91,7 +91,7 @@ const DrawerNavigator = createDrawerNavigator({
         labelStyle: {
             fontSize: 16
         },
-        activeTintColor: '#3398FF',
+        activeTintColor: '#C3142D',
         activeBackgroundColor: "#DAEFFF"
     }
 });

@@ -3,6 +3,7 @@ import { BackHandler } from 'react-native';
 import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Icon } from 'react-native-elements';
+import RewardProductComponent from '../components/RewardProductComponent';
 
 class RewardsScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -42,7 +43,7 @@ class RewardsScreen extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.viewStyles}>
-                <Text>Rewards Screen</Text>
+                <RewardProductComponent/>
             </SafeAreaView>
         );
     }

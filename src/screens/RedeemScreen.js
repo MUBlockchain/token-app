@@ -1,6 +1,6 @@
 import React from 'react';
 import { BackHandler } from 'react-native';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Button, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
@@ -21,7 +21,9 @@ class RedeemScreen extends React.Component {
     };
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            code:"",
+        };
     }
 
     componentDidMount() {
@@ -41,7 +43,17 @@ class RedeemScreen extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.viewStyles}>
-                <Text>Redeem Screen</Text>
+                <TextInput
+                    style={{ height: 40 }}
+                    placeholder="Enter Code"
+                    onChangeText={(value) => this.setState({ code: value })}
+                    value={this.state.code}
+                />
+
+                <Button
+                    onPress={this.getBalance}
+                    title="Redeem Code"
+                />
             </SafeAreaView>
         );
     }

@@ -6,16 +6,11 @@ import { DrawerItems } from 'react-navigation-drawer';
 
 
 class DrawerComponent extends React.Component {
-    openProfile = () => {
-        //this.props.navigation.navigate('Profile');
-        this.props.navigation.closeDrawer();
-    }
-
     render() {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
-                    <Image source={require('../../images/logo.png')} style={styles.profilePic} />
+                    <Image source={require('../images/logo.png')} style={styles.profilePic} />
                     <Text style={styles.name}>Peter Cooke</Text>
                     <Text style={styles.balance}>MUBC Token's: 5</Text>
                 </View>

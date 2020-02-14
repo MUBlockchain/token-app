@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button, BackHandler } from 'react-na
 import { SafeAreaView } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import QueryHandler from '../api/QueryHandler';
+import GroupAnnouncementComponent from '../components/AnnoucmentComponent';
 
 class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -11,10 +12,10 @@ class HomeScreen extends React.Component {
             title: "Home",
             headerLeft: () =>
                 <View style={{ marginLeft: 10 }}>
-                    <Icon 
+                    <Icon
                         name="menu"
                         onPress={() => navigation.toggleDrawer()}
-                        color="#000000" 
+                        color="#000000"
                     />
                 </View>,
         };
@@ -23,11 +24,11 @@ class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          uid: "",
-          mubc: "0"
+            uid: "",
+            mubc: "0"
         };
     }
-  
+
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -42,53 +43,53 @@ class HomeScreen extends React.Component {
         return true;
     }
 
-    getBalance = async () =>{
-      const r = await QueryHandler.getMUBCTokenBalance(this.state.uid);
-      this.setState({mubc: r.data.balance});
+    getBalance = async () => {
+        const r = await QueryHandler.getMUBCTokenBalance(this.state.uid);
+        this.setState({ mubc: r.data.balance });
     }
-  
-  
+
+
     render() {
-      return (
-        <SafeAreaView style={styles.viewStyles}>
-          <Text>Balance: </Text>
-          <Text>{this.state.mubc}</Text>
+        return (
+            <SafeAreaView style={styles.viewStyles}>
+                <GroupAnnouncementComponent></GroupAnnouncementComponent>
+                <Text>Balance: </Text>
+                <Text>{this.state.mubc}</Text>
 
-          <TextInput
-            style={{height: 40}}
-            placeholder="Enter UUID"
-            onChangeText={(value) => this.setState({uid: value})}
-            value={this.state.uid}
-          />
+                <TextInput
+                    style={{ height: 40 }}
+                    placeholder="Enter UUID"
+                    onChangeText={(value) => this.setState({ uid: value })}
+                    value={this.state.uid}
+                />
 
-          <Button
-            onPress={this.getBalance}
-            title="Get Balance"
-          />
-        </SafeAreaView>
-      );
+                <Button
+                    onPress={this.getBalance}
+                    title="Get Balance"
+                />
+            </SafeAreaView>
+        );
     }
-  }
-  
-  
-  export default HomeScreen;
-  
-  
-  const styles = StyleSheet.create({
+}
+
+
+export default HomeScreen;
+
+
+const styles = StyleSheet.create({
     logo: {
-      width: 250,
-      height: 250
+        width: 250,
+        height: 250
     },
     viewStyles: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'white'
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'white'
     },
     textStyles: {
-      color: 'white',
-      fontSize: 40,
-      fontWeight: 'bold'
+        color: 'white',
+        fontSize: 40,
+        fontWeight: 'bold'
     }
-  });
-  
+});
