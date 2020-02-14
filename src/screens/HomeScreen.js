@@ -1,17 +1,33 @@
 import React from 'react';
-import { BackHandler } from 'react-native';
-import { View, Text, StyleSheet, Image, TextInput, Icon, Button } from 'react-native';
-import { createAppContainer, SafeAreaView } from 'react-navigation';
+import { View, Text, StyleSheet, TextInput, Button, BackHandler } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
+import { Icon } from 'react-native-elements';
 import QueryHandler from '../api/QueryHandler';
 
 class HomeScreen extends React.Component {
+    static navigationOptions = ({ navigation }) => {
+        const { params = {} } = navigation.state;
+        return {
+            title: "Home",
+            headerLeft: () =>
+                <View style={{ marginLeft: 10 }}>
+                    <Icon 
+                        name="menu"
+                        onPress={() => navigation.toggleDrawer()}
+                        color="#000000" 
+                    />
+                </View>,
+        };
+    };
+
     constructor(props) {
-      super(props);
-      this.state = {
-        uid: "",
-        mubc: "0"
-      };
+        super(props);
+        this.state = {
+          uid: "",
+          mubc: "0"
+        };
     }
+  
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);

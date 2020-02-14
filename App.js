@@ -6,9 +6,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 class App extends React.Component {
   render() {
       return(
-        <MenuProvider>
-          <AppNavigator />
-        </MenuProvider>
+        <AppNavigator />
       );
   }
 }

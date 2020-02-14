@@ -40,7 +40,7 @@ class LoginScreen extends React.Component {
 
     loginHandler = async () => {
 
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('Drawer');
     }
 
   render() {

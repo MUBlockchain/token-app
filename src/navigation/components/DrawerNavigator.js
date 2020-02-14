@@ -1,0 +1,99 @@
+import React from 'react';
+import { Dimensions, TouchableOpacity, Image } from 'react-native';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import { Icon } from 'react-native-elements';
+import DrawerComponent from './DrawerComponent';
+import HomeScreen from '../../screens/HomeScreen';
+import RedeemScreen from '../../screens/RedeemScreen';
+import RewardsScreen from '../../screens/RewardsScreen';
+
+/**
+ * Variables
+ */
+const { width } = Dimensions.get('window');
+const drawerWidth = width * 0.70;
+
+/**
+ * Need to Create Stack for Each Screen
+ */
+const HomeStack = createStackNavigator({
+    Home: {
+        screen: HomeScreen
+    }
+});
+
+const RedeemStack = createStackNavigator({
+    Redeem: {
+        screen: RedeemScreen
+    }
+});
+
+
+const RewardsStack = createStackNavigator({
+    Rewards: {
+        screen: RewardsScreen
+    }
+});
+
+
+
+const DrawerNavigator = createDrawerNavigator({
+    Home: {
+        screen: HomeStack,
+        navigationOptions: {
+            drawerIcon: ({tintColor}) => 
+                <Icon 
+                    name="home" 
+                    color={tintColor} 
+                    type="font-awesome" 
+                    size={24} 
+                />
+        }
+    },
+    Rewards: {
+        screen: RewardsStack,
+        navigationOptions: {
+            drawerIcon: ({tintColor}) => 
+                <Icon 
+                    name="trophy" 
+                    color={tintColor} 
+                    type="font-awesome" 
+                    size={24} 
+                />
+        }
+    },
+    Redeem: {
+        screen: RedeemStack,
+        navigationOptions: {
+            drawerIcon: ({tintColor}) => 
+                <Icon 
+                    name="key" 
+                    color={tintColor} 
+                    type="font-awesome" 
+                    size={24} 
+                />
+        }
+    },
+}, { 
+    initialRouteName: "Home",
+    contentComponent: DrawerComponent,
+    drawerWidth: drawerWidth,
+    contentOptions: {
+        itemsContainerStyle: {
+            marginVertical: 0,
+            paddingVertical: 0
+        },
+        iconContainerStyle: {
+            marginLeft: 20,
+            marginRight: 8
+        },
+        labelStyle: {
+            fontSize: 16
+        },
+        activeTintColor: '#3398FF',
+        activeBackgroundColor: "#DAEFFF"
+    }
+});
+
+export default DrawerNavigator;

@@ -43,7 +43,7 @@ async componentDidMount() {
     return (
       <SafeAreaView style={styles.viewStyles}>
         <Image
-          source={require('../images/logo.png')}
+          source={require('../../images/logo.png')}
           style={styles.logo}
         />
       </SafeAreaView>
