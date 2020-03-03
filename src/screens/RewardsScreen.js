@@ -1,6 +1,6 @@
 import React from 'react';
 import { BackHandler } from 'react-native';
-import { View, Text, ActivityIndicator,  StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { SafeAreaView, withNavigation } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import RewardProductComponent from '../components/RewardProductComponent';
@@ -32,8 +32,10 @@ class RewardsScreen extends React.Component {
     };
 
     async componentDidMount() {
+        console.log("Component Did Mount");
         // This is how you handle auto api call on navigation to a screen
         this.focusListener = await this.props.navigation.addListener("didFocus", async () => {
+            console.log("Getting Items...");
             this.props.getItems();
         });
 
@@ -42,13 +44,14 @@ class RewardsScreen extends React.Component {
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        this.focusListener.remove();
     }
 
     handleBackButtonClick = () => {
         this.props.navigation.goBack();
         return true;
     }
-    
+
     _onRefresh = async () => {
         this.setState({ refreshing: true });
         this.props.getItems();
@@ -56,46 +59,70 @@ class RewardsScreen extends React.Component {
     }
 
 
-    renderItemComponents = (itemArr) => {
-        console.log("Render Item Components");
-        /*
-        return itemArr.map((item, i) => {
-            return <GroupComponent
+    renderItemComponents = () => {
+        console.log("rednerItemComponetns...")
+        console.log(JSON.stringify(this.props.items));
+
+        return this.props.items.map((item, i) => {
+            return <RewardProductComponent
                 key={i}
-                name={group.group.name}
-                description={group.group.description}
-                groupID={group.group.groupID}
+                title={item.description}
+                price={item.cost}
                 pic=""
-                navigation={this.props.navigation}
             />;
         });
-        */
+
     }
-    
+
 
     render() {
-        
+
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
+        //console.log("ITEMS" + this.props.items)
+        
         if (this.props.items.length === 0) {
             if (this.props.isLoading && !this.state.refreshing) {
                 return (
                     <SafeAreaView style={styles.loadingContainer}>
-                        <ActivityIndicator size="large" color="#C3142D" />
+                        <ActivityIndicator size="large" color="#86DDF9" />
                     </SafeAreaView>
                 );
             }
-        
             return (
-                <SafeAreaView style={styles.viewStyles}>
-                    <RewardProductComponent/>
+                <SafeAreaView style={styles.emptyContainer}>
+                    <ScrollView
+                        contentContainerStyle={styles.emptyContainer}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh}
+                            />
+                        }>
+                        <Text style={styles.text}>
+                            {this.props.placeholder}
+                        </Text>
+                    </ScrollView>
                 </SafeAreaView>
             );
         } else {
             return (
-                <Text>Data Fetched</Text>
+                <SafeAreaView style={styles.groupContainer}>
+                    <View style={styles.gridContainer}>
+                        <ScrollView contentContainerStyle={[styles.gridContainer, styles.extraSpacing]}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this._onRefresh}
+                                />
+                            }>
+                            {this.renderItemComponents()}
+                        </ScrollView>
+                    </View>
+                </SafeAreaView>
             );
+
         }
-        
+
 
 
     }
@@ -128,26 +155,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    logo: {
-        width: 250,
-        height: 250
-    },
-    viewStyles: {
+    emptyContainer: {
+        justifyContent: "center",
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white'
+        padding: 35
     },
-    textStyles: {
-        color: 'white',
-        fontSize: 40,
-        fontWeight: 'bold'
+    text: {
+        textAlign: "center"
+    },
+    groupContainer: {
+        backgroundColor: "#F5F5F5",
+        flex: 1
+    },
+    scrollViewContainer: {
+        flex: 1
     },
     gridContainer: {
         flexWrap: "wrap",
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-    }
-
+    },
+    extraSpacing: {
+        paddingTop: 5,
+        paddingBottom: 20
+    },
 });
+

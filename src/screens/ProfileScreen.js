@@ -1,15 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Button, BackHandler } from 'react-native';
+import { View, StyleSheet, Button, BackHandler } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import QueryHandler from '../api/QueryHandler';
-import GroupAnnouncementComponent from '../components/AnnoucmentComponent';
 
-class HomeScreen extends React.Component {
+class ProfileScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         const { params = {} } = navigation.state;
         return {
-            title: "Home",
+            title: "Profile",
             headerLeft: () =>
                 <View style={{ marginLeft: 10 }}>
                     <Icon
@@ -43,25 +41,26 @@ class HomeScreen extends React.Component {
         return true;
     }
 
-    getBalance = async () => {
-        const r = await QueryHandler.getMUBCTokenBalance(this.state.uid);
-        this.setState({ mubc: r.data.balance });
+    logout = async () => {
+        this.props.navigation.navigate('Login');
     }
 
 
     render() {
         return (
             <SafeAreaView style={styles.viewStyles}>
-                <GroupAnnouncementComponent></GroupAnnouncementComponent>
-                <Text>Balance: </Text>
-                <Text>{this.state.mubc}</Text>
+
+                <Button
+                    onPress={this.logout}
+                    title="Logout"
+                />
             </SafeAreaView>
         );
     }
 }
 
 
-export default HomeScreen;
+export default ProfileScreen;
 
 
 const styles = StyleSheet.create({

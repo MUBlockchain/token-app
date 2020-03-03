@@ -33,16 +33,33 @@ class QueryHandler {
 
     /**
      * Get list of item serials
-
      */
     static getItemSerials() {
 
         var instance = axios.create({
-            baseURL: 'http://3.136.85.69:3000/api/',
+            baseURL: 'http://app.mubc.io:3000/api/',
             timeout: 1000,
         });
 
         return instance.get('/item/active')
+            .catch(function (error) {
+                console.log(error);
+            });
+            
+    }
+
+    /**
+     * Get User Profile
+     * @param {string} uniqueid 
+     */
+    static getUserProfile(uniqueid) {
+
+        var instance = axios.create({
+            baseURL: 'http://app.mubc.io:3000/api/',
+            timeout: 1000,
+        });
+        
+        return instance.get('/user/' + uniqueid + '/profile')
             .catch(function (error) {
                 console.log(error);
             });

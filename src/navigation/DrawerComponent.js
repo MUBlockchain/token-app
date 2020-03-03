@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView, withNavigation } from 'react-navigation';
 import { Image } from 'react-native-elements';
 import { DrawerItems } from 'react-navigation-drawer';
+import { connect } from 'react-redux';
 
 
 class DrawerComponent extends React.Component {
@@ -11,8 +12,8 @@ class DrawerComponent extends React.Component {
             <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
                     <Image source={require('../images/logo.png')} style={styles.profilePic} />
-                    <Text style={styles.name}>Peter Cooke</Text>
-                    <Text style={styles.balance}>MUBC Token's: 5</Text>
+                    <Text style={styles.name}>{this.props.name}</Text>
+                    <Text style={styles.balance}>MUBC Token's: {this.props.balance}</Text>
                 </View>
                 <View style={styles.mainContainer}>
                     <DrawerItems {...this.props} />
@@ -25,7 +26,15 @@ class DrawerComponent extends React.Component {
     }
 }
 
-export default DrawerComponent;
+const mapStateToProps = (state) => {
+    return {
+        name: state.userReducer.name,
+        balance: state.userReducer.balance
+    }
+}
+
+export default connect(mapStateToProps, null)(withNavigation(DrawerComponent));
+
 
 const styles = StyleSheet.create({
     container: {

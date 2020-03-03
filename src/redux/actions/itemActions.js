@@ -29,13 +29,15 @@ export const getItems = () => async (dispatch) => {
 
     //Do api call
     var res = await QueryHandler.getItemSerials();
-    console.log("Item Serials: " + JSON.stringify(res.data));
-
+    // console.log("Item Serials: " + JSON.stringify(res.data));
     if (!res) {
+        console.log("ItemFailure...");
         dispatch(itemsFailure(res.status));
-    } else if (res['status' === 200]) {
+    } else if (res['status'] === 200) {
+        console.log("ItemsSuccess...");
         dispatch(itemsSuccess(res.data.active));
     } else {
+        console.log("ItemsTimeout...");
         dispatch(itemsTimeout());
     }
 }

@@ -7,6 +7,7 @@ import DrawerComponent from './DrawerComponent';
 import HomeScreen from '../screens/HomeScreen';
 import RedeemScreen from '../screens/RedeemScreen';
 import RewardsScreen from '../screens/RewardsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 /**
  * Variables
@@ -33,6 +34,12 @@ const RedeemStack = createStackNavigator({
 const RewardsStack = createStackNavigator({
     Rewards: {
         screen: RewardsScreen
+    }
+});
+
+const ProfileStack = createStackNavigator({
+    Profile: {
+        screen: ProfileScreen
     }
 });
 
@@ -69,6 +76,18 @@ const DrawerNavigator = createDrawerNavigator({
             drawerIcon: ({tintColor}) => 
                 <Icon 
                     name="key" 
+                    color={tintColor} 
+                    type="font-awesome" 
+                    size={24} 
+                />
+        }
+    },
+    Profile: {
+        screen: ProfileStack,
+        navigationOptions: {
+            drawerIcon: ({tintColor}) => 
+                <Icon 
+                    name="sign-out" 
                     color={tintColor} 
                     type="font-awesome" 
                     size={24} 
