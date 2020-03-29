@@ -15,9 +15,8 @@ const itemsSuccess = (data) => ({
     data
 })
 
-const itemsFailure = (error) => ({
-    type: ITEMS_FAILURE,
-    error
+const itemsFailure = () => ({
+    type: ITEMS_FAILURE
 })
 
 const itemsTimeout = () => ({
@@ -30,9 +29,10 @@ export const getItems = () => async (dispatch) => {
     //Do api call
     var res = await QueryHandler.getItemSerials();
     // console.log("Item Serials: " + JSON.stringify(res.data));
+    
     if (!res) {
         console.log("ItemFailure...");
-        dispatch(itemsFailure(res.status));
+        dispatch(itemsFailure());
     } else if (res['status'] === 200) {
         console.log("ItemsSuccess...");
         dispatch(itemsSuccess(res.data.active));

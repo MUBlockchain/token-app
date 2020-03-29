@@ -13,19 +13,20 @@ class AnnouncementComponent extends React.Component {
                         <View style={styles.subRowStart}>
                             <Image source={require('../images/logo.png')} style={styles.profPic} />
                             <View style={styles.info}>
-                                <Text style={styles.textEmphasis}>Jack Gilcrest</Text>
+                                <Text style={styles.textEmphasis}>{this.props.title}</Text>
+                                <Text style={styles.textAuthor}>{this.props.author}</Text>
                             </View>
                         </View>
                         <View style={styles.subRowEnd}>
                             <View style={styles.date}>
-                                <Text style={styles.dateText}>1 min ago</Text>
+                                <Text style={styles.dateText}>{this.props.date.substring(5, 10)}</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.content}>
                         <Text style={styles.contentText}>
-                            We will have a club meeting at 6:30PM today in Farmer 200!
-                            </Text>
+                            {this.props.message}
+                        </Text>
                     </View>
                 </View>
             </SafeAreaView>
@@ -37,7 +38,7 @@ export default AnnouncementComponent;
 
 const styles = StyleSheet.create({
     outerContainer: {
-        padding: 5,
+        padding: 10,
         marginVertical: 5,
         marginHorizontal: 18,
         backgroundColor: '#FFFFFF',
@@ -46,7 +47,8 @@ const styles = StyleSheet.create({
         shadowOpacity: 1.0,
         shadowRadius: 2,
         elevation: 5,
-        borderRadius: 10
+        borderRadius: 10,
+        width: 350,
     },
     innerContainer: {
         padding: 10,
@@ -78,9 +80,14 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     textEmphasis: {
-        fontSize: 16,
+        fontSize: 20,
         color: 'black',
         fontWeight: 'bold'
+    },
+    textAuthor: {
+        fontSize: 9,
+        color: 'black',
+        marginLeft: 10
     },
     profPic: {
         height: 35,

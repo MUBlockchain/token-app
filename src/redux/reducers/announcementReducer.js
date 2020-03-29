@@ -1,43 +1,41 @@
 
-import { ITEMS_LOADING, ITEMS_SUCCESS, ITEMS_FAILURE, ITEMS_TIMEOUT } from '../actions/constants';
+import { ANNOUNCEMENT_FAILURE, ANNOUNCEMENT_TIMEOUT, ANNOUNCEMENT_SUCCESS, ANNOUNCEMENT_LOADING } from '../actions/constants';
 
-const initItemsState = {
+const initAnnouncementState = {
     isLoading: false,
-    items: [],
+    announcements: [],
     errorBack: false,
     error: '',
-    placeholder: 'There are currenlty no items for you to purchase!',
     timeoutOccurred: false
 }
 
 
-const itemReducer = (state = initItemsState, action) => {
+const announcementReducer = (state = initAnnouncementState, action) => {
     switch (action.type) {
-        case ITEMS_LOADING:
+        case ANNOUNCEMENT_LOADING:
             return {
                 ...state,
                 isLoading: true,
                 errorBack: false,
-                placeHolder: 'There are currently no items for you to purchase!',
                 timeoutOccurred: false
             };
-        case ITEMS_SUCCESS:
+        case ANNOUNCEMENT_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
                 errorBack: false,
                 timeoutOccurred: false,
-                items: action.data
+                announcements: action.data
             };
-        case ITEMS_FAILURE:
+        case ANNOUNCEMENT_FAILURE:
             return {
                 ...state,
                 isLoading: false,
                 errorBack: true,
                 timeoutOccurred: false,
-                error: 'Error while fetching Items'
+                error: 'Error while fetching Announcements'
             };
-        case ITEMS_TIMEOUT:
+        case ANNOUNCEMENT_TIMEOUT:
             return {
                 ...state,
                 isLoading: false,
@@ -50,4 +48,4 @@ const itemReducer = (state = initItemsState, action) => {
     }
 }
 
-export default itemReducer;
+export default announcementReducer;

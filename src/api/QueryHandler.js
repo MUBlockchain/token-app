@@ -45,7 +45,7 @@ class QueryHandler {
             .catch(function (error) {
                 console.log(error);
             });
-            
+
     }
 
     /**
@@ -58,12 +58,78 @@ class QueryHandler {
             baseURL: 'http://app.mubc.io:3000/api/',
             timeout: 1000,
         });
-        
+
         return instance.get('/user/' + uniqueid + '/profile')
             .catch(function (error) {
                 console.log(error);
             });
-            
+
+    }
+
+    /**
+     * Get Annoucements
+     */
+    static getAnnouncements() {
+
+        var instance = axios.create({
+            baseURL: 'http://app.mubc.io:3000/api/',
+            timeout: 1000,
+        });
+
+        return instance.get('/announcements')
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    }
+
+    static purchaseItem(serial, uid) {
+        var instance = axios.create({
+            baseURL: 'http://app.mubc.io:3000/api/'
+        });
+
+        return instance.get('/item/' + serial + '/purchase', {
+            params: {
+                uniqueid: uid
+            }
+        })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+
+    static registerUser(uuid, name) {
+        var instance = axios.create({
+            baseURL: 'http://app.mubc.io:3000/api/'
+        });
+
+        return instance.get('/user/register', {
+            params: {
+                uniqueid: uuid,
+                name: name,
+                executive: false
+            }
+        })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    static mintToUser(uuid, amount, executive) {
+        var instance = axios.create({
+            baseURL: 'http://app.mubc.io:3000/api/'
+        });
+
+        return instance.get('/user/' + uuid + '/mint', {
+            params: {
+                quantity: amount,
+                as: executive
+            }
+        })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
 

@@ -24,12 +24,13 @@ const HomeStack = createStackNavigator({
     }
 });
 
+/*
 const RedeemStack = createStackNavigator({
     Redeem: {
         screen: RedeemScreen
     }
 });
-
+*/
 
 const RewardsStack = createStackNavigator({
     Rewards: {
@@ -70,6 +71,7 @@ const DrawerNavigator = createDrawerNavigator({
                 />
         }
     },
+    /*
     Redeem: {
         screen: RedeemStack,
         navigationOptions: {
@@ -82,12 +84,13 @@ const DrawerNavigator = createDrawerNavigator({
                 />
         }
     },
+    */
     Profile: {
         screen: ProfileStack,
         navigationOptions: {
             drawerIcon: ({tintColor}) => 
                 <Icon 
-                    name="sign-out" 
+                    name="user" 
                     color={tintColor} 
                     type="font-awesome" 
                     size={24} 

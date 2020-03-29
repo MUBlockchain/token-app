@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Button, BackHandler } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { View, Text, StyleSheet, BackHandler, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { SafeAreaView, withNavigation} from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import QueryHandler from '../api/QueryHandler';
 import GroupAnnouncementComponent from '../components/AnnoucmentComponent';
+import { connect } from 'react-redux';
+import { getAnnouncements } from '../redux/actions/announcementActions'
 
 class HomeScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -29,8 +30,11 @@ class HomeScreen extends React.Component {
         };
     }
 
+    async componentDidMount() {
+        console.log("Component Did Mount");
+        // This is how you handle auto api call on navigation to a screen
+        await this.props.getAnnouncements();
 
-    componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -43,28 +47,122 @@ class HomeScreen extends React.Component {
         return true;
     }
 
-    getBalance = async () => {
-        const r = await QueryHandler.getMUBCTokenBalance(this.state.uid);
-        this.setState({ mubc: r.data.balance });
+    renderAnnouncementsComponent = () => {
+        console.log("renderAnnouncementsComponent...")
+        return this.props.announcements.map((annoucement, i) => {
+            return <GroupAnnouncementComponent
+                key={i}
+                author={annoucement.author}
+                date={annoucement.onCreated}
+                message={annoucement.annoucment}
+                title={annoucement.title}
+            />
+        });
     }
 
 
     render() {
-        return (
-            <SafeAreaView style={styles.viewStyles}>
-                <GroupAnnouncementComponent></GroupAnnouncementComponent>
-                <Text>Balance: </Text>
-                <Text>{this.state.mubc}</Text>
-            </SafeAreaView>
-        );
+        if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
+        // console.log("Announcements Error: " + this.props.error)
+        
+        if (this.props.announcements.length === 0) {
+            if (this.props.isLoading && !this.state.refreshing) {
+                return (
+                    <SafeAreaView style={styles.loadingContainer}>
+                        <ActivityIndicator size="large" color="#C3142D" />
+                    </SafeAreaView>
+                );
+            }
+
+            return (
+                <SafeAreaView style={styles.emptyContainer}>
+                    <ScrollView
+                        contentContainerStyle={styles.emptyContainer}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.refreshing}
+                                onRefresh={this._onRefresh}
+                            />
+                        }>
+                        <Text style={styles.text}>
+                            {this.props.error}
+                        </Text>
+                    </ScrollView>
+                </SafeAreaView>
+            );
+        } else {
+            return (
+                <SafeAreaView style={styles.groupContainer}>
+                    <View style={styles.scrollViewContainer}>
+                        <ScrollView contentContainerStyle={[styles.gridContainer, styles.extraSpacing]}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this._onRefresh}
+                                />
+                            }>
+                            {this.renderAnnouncementsComponent()}
+                        </ScrollView>
+                    </View>
+                </SafeAreaView>
+            );
+
+        }
     }
 }
 
 
-export default HomeScreen;
+const mapStateToProps = (state) => {
+    return {
+        isLoading: state.announcementReducer.isLoading,
+        announcements: state.announcementReducer.announcements,
+        errorBack: state.announcementReducer.errorBack,
+        error: state.announcementReducer.error,
+        timeoutOccurred: state.announcementReducer.timeoutOccurred
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getAnnouncements: () => dispatch(getAnnouncements())
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(HomeScreen));
 
 
 const styles = StyleSheet.create({
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    emptyContainer: {
+        justifyContent: "center",
+        flex: 1,
+        padding: 35
+    },
+    text: {
+        textAlign: "center"
+    },
+    groupContainer: {
+        backgroundColor: "#F5F5F5",
+        flex: 1
+    },
+    scrollViewContainer: {
+        flex: 1
+    },
+    gridContainer: {
+        flexWrap: "wrap",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    extraSpacing: {
+        paddingTop: 5,
+        paddingBottom: 20
+    },
     logo: {
         width: 250,
         height: 250

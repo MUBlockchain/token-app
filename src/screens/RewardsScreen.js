@@ -6,12 +6,16 @@ import { Icon } from 'react-native-elements';
 import RewardProductComponent from '../components/RewardProductComponent';
 import { connect } from 'react-redux';
 import { getItems } from '../redux/actions/itemActions'
+import { getUserProfile } from '../redux/actions/userActions';
 
 class RewardsScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            refreshing: false
+            refreshing: false,
+            msg: "Error",
+            pItems: [],
+            npItems: []
         };
     }
 
@@ -32,19 +36,14 @@ class RewardsScreen extends React.Component {
     };
 
     async componentDidMount() {
-        console.log("Component Did Mount");
-        // This is how you handle auto api call on navigation to a screen
-        this.focusListener = await this.props.navigation.addListener("didFocus", async () => {
-            console.log("Getting Items...");
-            this.props.getItems();
-        });
-
+        await this.fillItemArrays();
+        // console.log("RewardsScreen: " + this.props.)
+        await this.props.getUserProfile(this.props.uniqueID);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
-        this.focusListener.remove();
     }
 
     handleBackButtonClick = () => {
@@ -54,40 +53,86 @@ class RewardsScreen extends React.Component {
 
     _onRefresh = async () => {
         this.setState({ refreshing: true });
-        this.props.getItems();
+        this.fillItemArrays();
+        await this.props.getUserProfile(this.props.uniqueID);
         this.setState({ refreshing: false });
     }
 
+    fillItemArrays = async () => {
+        var pItems = [];
+        var npItems = [];
+        
+        await this.props.getItems();
+
+        this.props.items.forEach(item => {
+            if (item.purchasers.includes(this.props.userId)) {
+                pItems.push(item);
+            } else {
+                npItems.push(item);
+            }
+        });
+        
+        console.log(pItems);
+
+        this.setState({
+            pItems: pItems,
+            npItems: npItems
+        });
+
+    }
 
     renderItemComponents = () => {
-        console.log("rednerItemComponetns...")
-        console.log(JSON.stringify(this.props.items));
+        console.log(this.props.userId);
 
-        return this.props.items.map((item, i) => {
+        var rendernpItems = this.state.npItems.length > 0;
+        var renderpItems = this.state.pItems.length > 0;
+
+        return (
+            <View>
+                {rendernpItems ? this.renderItems(this.state.npItems, "Not Purchased Items") : null}
+                {renderpItems ? this.renderItems(this.state.pItems, "Purchased Items") : null}
+            </View>
+        );
+    }
+
+    renderItems = (items, status) => {
+        return (
+            <View style={[styles.roleSection]}>
+                <Text style={styles.roleText}>
+                    {status}
+                </Text>
+                {this.renderItemsHelper(items)}
+            </View>
+        );
+    }
+
+    renderItemsHelper = (items) => {
+        return items.map((item, i) => {
             return <RewardProductComponent
                 key={i}
                 title={item.description}
                 price={item.cost}
                 pic=""
+                serial={item.serial}
+                uniqueID={this.props.uniqueID}
             />;
         });
-
     }
-
 
     render() {
 
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
-        //console.log("ITEMS" + this.props.items)
+        // console.log("ITEMS Error: " + this.props.items.error)
         
         if (this.props.items.length === 0) {
             if (this.props.isLoading && !this.state.refreshing) {
                 return (
                     <SafeAreaView style={styles.loadingContainer}>
-                        <ActivityIndicator size="large" color="#86DDF9" />
+                        <ActivityIndicator size="large" color="#C3142D" />
                     </SafeAreaView>
                 );
             }
+
             return (
                 <SafeAreaView style={styles.emptyContainer}>
                     <ScrollView
@@ -99,7 +144,7 @@ class RewardsScreen extends React.Component {
                             />
                         }>
                         <Text style={styles.text}>
-                            {this.props.placeholder}
+                            {this.props.error}
                         </Text>
                     </ScrollView>
                 </SafeAreaView>
@@ -122,9 +167,6 @@ class RewardsScreen extends React.Component {
             );
 
         }
-
-
-
     }
 }
 
@@ -133,15 +175,18 @@ const mapStateToProps = (state) => {
         isLoading: state.itemReducer.isLoading,
         items: state.itemReducer.items,
         errorBack: state.itemReducer.errorBack,
-        errorMsg: state.itemReducer.errorMsg,
+        error: state.itemReducer.error,
         placeholder: state.itemReducer.placeholder,
-        timeoutOccurred: state.itemReducer.timeoutOccurred
+        timeoutOccurred: state.itemReducer.timeoutOccurred,
+        userId: state.userReducer.uuid,
+        uniqueID: state.userReducer.uniqueID
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getItems: () => dispatch(getItems())
+        getItems: () => dispatch(getItems()),
+        getUserProfile: (uuid) => dispatch(getUserProfile(uuid))
     }
 }
 
@@ -180,5 +225,17 @@ const styles = StyleSheet.create({
         paddingTop: 5,
         paddingBottom: 20
     },
+    roleSection: {
+        flex: 1,
+        alignItems: "center",
+    },
+    roleText: {
+        fontSize: 20,
+        color: "#000000",
+        justifyContent: "center",
+        alignItems: "center",
+        marginBottom: 5
+    },
+
 });
 
