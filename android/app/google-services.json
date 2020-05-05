@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "733695350424",
+    "firebase_url": "https://mubcapp.firebaseio.com",
+    "project_id": "mubcapp",
+    "storage_bucket": "mubcapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733695350424:android:e8b8f501dfcc85759262ed",
+        "android_client_info": {
+          "package_name": "com.mubcapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "733695350424-5fek4sv9tsgfkc4p8jmfs0p66ba615t2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mubcapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhP2x6cEGe-WagPP2o0xfiERZcziasYaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "733695350424-ufdbr57iqi9npe7u0nu8gh935p4icpi3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
