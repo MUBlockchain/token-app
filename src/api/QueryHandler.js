@@ -28,7 +28,6 @@ class QueryHandler {
             .catch(function (error) {
                 console.log(error);
             });
-
     }
 
     /**
