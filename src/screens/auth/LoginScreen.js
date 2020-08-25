@@ -63,14 +63,17 @@ class LoginScreen extends React.Component {
         try {
           const hasPlayServices = await GoogleSignin.hasPlayServices();
           console.log(hasPlayServices);
+
           const userInfo = await GoogleSignin.signIn();
-          // console.log(JSON.stringify(userInfo));
+          console.log(JSON.stringify(userInfo));
+
           const id_token = await GoogleSignin.getTokens();
           this.setState({ userInfo });
           console.log(JSON.stringify(id_token.idToken));
+          
           const r = await QueryHandler.signIn(id_token.idToken);
           //console.log(r);
-          // this.props.navigation.navigate('Drawer');
+          //this.props.navigation.navigate('Drawer');
         } catch (error) {
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // user cancelled the login flow

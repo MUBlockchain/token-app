@@ -4,11 +4,6 @@ import axios from 'axios';
 class QueryHandler {
 
     constructor() { }
-    static test = 'test';
-
-    static getHelloWorld() {
-        return 'Hello World';
-    }
 
     /**
      * Get User Profile
@@ -17,16 +12,16 @@ class QueryHandler {
     static signIn(userId) {
 
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:3001/api/'
+            baseURL: 'http://app.mubc.io:8080/api/'
         });
-
+        
         return instance.get('/signin', {
             params: {
                 id: userId
             }
         })
             .catch(function (error) {
-                console.log(error);
+                console.log("Sigin Error: " + error);
             });
     }
 
@@ -38,7 +33,7 @@ class QueryHandler {
         console.log('API HANDLER')
 
         var instance = axios.create({
-            baseURL: 'http://3.19.241.166:3001/api/',
+            baseURL: 'http://app.mubc.io:8080/api/',
             timeout: 1000,
         });
 
@@ -57,7 +52,7 @@ class QueryHandler {
     static getItemSerials() {
 
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:3001/api/',
+            baseURL: 'http://app.mubc.io:8080/api/',
             timeout: 1000,
         });
 
@@ -75,7 +70,7 @@ class QueryHandler {
     static getUserProfile(uniqueid) {
 
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:3001/api/',
+            baseURL: 'http://app.mubc.io:8080/api/',
             timeout: 1000,
         });
 
@@ -92,7 +87,7 @@ class QueryHandler {
     static getAnnouncements() {
 
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:3001/api/',
+            baseURL: 'http://app.mubc.io:8080/api/',
             timeout: 1000,
         });
 
@@ -104,7 +99,7 @@ class QueryHandler {
 
     static purchaseItem(serial, uid) {
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:3001/api/'
+            baseURL: 'http://app.mubc.io:8080/api/'
         });
 
         return instance.get('/item/' + serial + '/purchase', {
@@ -120,7 +115,7 @@ class QueryHandler {
 
     static registerUser(uuid, name) {
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:3001/api/'
+            baseURL: 'http://app.mubc.io:8080/api/'
         });
 
         return instance.get('/user/register', {
@@ -137,7 +132,7 @@ class QueryHandler {
 
     static mintToUser(uuid, amount, executive) {
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:3001/api/'
+            baseURL: 'http://app.mubc.io:8080/api/'
         });
 
         return instance.get('/user/' + uuid + '/mint', {
