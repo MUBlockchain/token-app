@@ -7,8 +7,7 @@
  */
 
 import React from 'react';
-import { BackHandler } from 'react-native';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Image, BackHandler, TouchableHighlight, Text } from 'react-native';
 import { SafeAreaView, withNavigation } from 'react-navigation';
 import { Input, Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
@@ -72,8 +71,8 @@ class LoginScreen extends React.Component {
           console.log(JSON.stringify(id_token.idToken));
           
           const r = await QueryHandler.signIn(id_token.idToken);
-          //console.log(r);
-          //this.props.navigation.navigate('Drawer');
+          console.log(r);
+          this.props.navigation.navigate('Drawer');
         } catch (error) {
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // user cancelled the login flow
@@ -136,75 +135,18 @@ class LoginScreen extends React.Component {
     render() {
         return (
             <SafeAreaView style={styles.viewStyles}>
-                <GoogleSigninButton
-                    style={{ width: 192, height: 56 }}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Dark}
-                    onPress={this._signIn}
-                    disabled={this.state.isSigninInProgress} 
+                <Image
+                    source={require('../../images/logo.png')}
+                    style={styles.logo}
+                />
+
+                <TouchableHighlight
+                    style={styles.signIn}
                     onPress={this.signIn}
-                />
-                <Input
-                    placeholder="Miami UUID"
-                    leftIcon={
-                        <Icon
-                            name="email"
-                            type="material"
-                            size={27}
-                        />
-                    }
-                    leftIconContainerStyle={styles.iconContainer}
-                    shake={true}
-                    onChangeText={(value) => this.setState({ uuid: value })}
-                    value={this.state.uuid}
-                    containerStyle={styles.inputOuterContainer}
-                    inputContainerStyle={styles.inputInnerContainer}
-                    inputStyle={styles.input}
-                />
+                    underlayColor='#fff'>
+                    <Text style={[24, styles.signInText]}>Sign in with Google</Text>
+                </TouchableHighlight>
 
-                <Button
-                    title="Login"
-                    onPress={this.loginHandler}
-                />
-                <Input
-                    placeholder="Miami UUID To Register"
-                    leftIcon={
-                        <Icon
-                            name="email"
-                            type="material"
-                            size={27}
-                        />
-                    }
-                    leftIconContainerStyle={styles.iconContainer}
-                    shake={true}
-                    onChangeText={(value) => this.setState({ registerUuid: value })}
-                    value={this.state.registerUuid}
-                    containerStyle={styles.inputOuterContainer}
-                    inputContainerStyle={styles.inputInnerContainer}
-                    inputStyle={styles.input}
-                />
-                <Input
-                    placeholder="Name"
-                    leftIcon={
-                        <Icon
-                            name="email"
-                            type="material"
-                            size={27}
-                        />
-                    }
-                    leftIconContainerStyle={styles.iconContainer}
-                    shake={true}
-                    onChangeText={(value) => this.setState({ name: value })}
-                    value={this.state.name}
-                    containerStyle={styles.inputOuterContainer}
-                    inputContainerStyle={styles.inputInnerContainer}
-                    inputStyle={styles.input}
-                />
-
-                <Button
-                    title="Register"
-                    onPress={this.registerHandler}
-                />
             </SafeAreaView>
         );
     }
@@ -238,11 +180,29 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white'
+        backgroundColor: '#FFFFFF'
     },
     textStyles: {
         color: 'white',
         fontSize: 40,
         fontWeight: 'bold'
-    }
+    },
+    signIn:{
+        marginRight:40,
+        marginLeft:40,
+        marginTop:25,
+        paddingTop:20,
+        paddingBottom:20,
+        paddingRight:45,
+        paddingLeft:45,
+        backgroundColor:'#C9102E',
+        borderRadius:40,
+        borderWidth: 0,
+        borderColor: '#fff'
+      },
+      signInText:{
+          color:'#fff',
+          textAlign:'center',
+          fontSize:16
+      }
 });
