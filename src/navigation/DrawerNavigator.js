@@ -8,6 +8,7 @@ import HomeScreen from '../screens/HomeScreen';
 import RedeemScreen from '../screens/RedeemScreen';
 import RewardsScreen from '../screens/RewardsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import LoginScreen from '../screens/auth/LoginScreen';
 
 /**
  * Variables
@@ -44,6 +45,12 @@ const ProfileStack = createStackNavigator({
     }
 });
 
+const LoginStack = createStackNavigator({
+    Login: {
+        screen: LoginScreen
+    }
+});
+
 
 
 const DrawerNavigator = createDrawerNavigator({
@@ -71,6 +78,18 @@ const DrawerNavigator = createDrawerNavigator({
                 />
         }
     },
+    Logout: {
+        screen: LoginStack,
+        navigationOptions: {
+            drawerIcon: ({tintColor}) => 
+                <Icon 
+                    name="sign-out" 
+                    color={tintColor} 
+                    type="font-awesome" 
+                    size={24} 
+                />
+        }
+    },
     /*
     Redeem: {
         screen: RedeemStack,
@@ -84,7 +103,7 @@ const DrawerNavigator = createDrawerNavigator({
                 />
         }
     },
-    */
+    
     Profile: {
         screen: ProfileStack,
         navigationOptions: {
@@ -97,6 +116,7 @@ const DrawerNavigator = createDrawerNavigator({
                 />
         }
     },
+    */
 }, { 
     initialRouteName: "Home",
     contentComponent: DrawerComponent,

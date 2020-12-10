@@ -6,7 +6,9 @@ const initState = {
     uuid: -1,
     balance: 0,
     purchases: [],
-    isLoading: false
+    profilePic: 'https://lh3.googleusercontent.com/-bDdZL2tOyTI/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclbHP9e-0lGGlWhg7K89k3ntLDwXA/s96-c/photo.jpg',
+    isLoading: false,
+    token: ""
 };
 const userReducer = (state = initState, action) => {
     switch (action.type) {
@@ -23,7 +25,9 @@ const userReducer = (state = initState, action) => {
                 uuid: action.data.uuid,
                 balance: action.data.balance,
                 purchases: action.data.purchases,
-                isLoading: false
+                profilePic: action.profilePic,
+                isLoading: false,
+                token: action.token
             };
         case USER_FAILURE:
             return {
@@ -33,6 +37,7 @@ const userReducer = (state = initState, action) => {
                 uuid: -1,
                 balance: 0,
                 purchases: [],
+                profilePic: 'https://lh3.googleusercontent.com/-bDdZL2tOyTI/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclbHP9e-0lGGlWhg7K89k3ntLDwXA/s96-c/photo.jpg',
                 isLoading: false
             };
         case USER_TIMEOUT:
@@ -43,6 +48,7 @@ const userReducer = (state = initState, action) => {
                 uuid: -1,
                 balance: 0,
                 purchases: [],
+                profilePic: 'https://lh3.googleusercontent.com/-bDdZL2tOyTI/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclbHP9e-0lGGlWhg7K89k3ntLDwXA/s96-c/photo.jpg',
                 isLoading: false
             };
         default:

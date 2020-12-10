@@ -26,14 +26,13 @@ class HomeScreen extends React.Component {
         super(props);
         this.state = {
             uid: "",
-            mubc: "0"
+            mubc: "0",
+            refreshing: false
         };
     }
 
     async componentDidMount() {
-        console.log("Component Did Mount");
-        // This is how you handle auto api call on navigation to a screen
-        await this.props.getAnnouncements();
+        await this.props.getAnnouncements(this.props.token);
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
@@ -49,15 +48,23 @@ class HomeScreen extends React.Component {
 
     renderAnnouncementsComponent = () => {
         console.log("renderAnnouncementsComponent...")
-        return this.props.announcements.map((annoucement, i) => {
+        this.props.announcements.reverse();
+        return this.props.announcements.map((announcement, i) => {
             return <GroupAnnouncementComponent
                 key={i}
-                author={annoucement.author}
-                date={annoucement.onCreated}
-                message={annoucement.annoucment}
-                title={annoucement.title}
+                author={announcement.author}
+                //date={annoucement.onCreated}
+                message={announcement.announcement}
+                title={announcement.title}
             />
         });
+    }
+
+    async _onRefresh () {
+        console.log(this.props.isLoading)
+        this.setState({refreshing: true})
+        await this.props.getAnnouncements(this.props.token);
+        this.setState({refreshing: false})
     }
 
 
@@ -66,7 +73,7 @@ class HomeScreen extends React.Component {
         // console.log("Announcements Error: " + this.props.error)
         
         if (this.props.announcements.length === 0) {
-            if (this.props.isLoading && !this.state.refreshing) {
+            if (this.props.isLoading && this.state.refreshing) {
                 return (
                     <SafeAreaView style={styles.loadingContainer}>
                         <ActivityIndicator size="large" color="#C3142D" />
@@ -113,18 +120,20 @@ class HomeScreen extends React.Component {
 
 
 const mapStateToProps = (state) => {
+    console.log(state);
     return {
         isLoading: state.announcementReducer.isLoading,
         announcements: state.announcementReducer.announcements,
         errorBack: state.announcementReducer.errorBack,
         error: state.announcementReducer.error,
-        timeoutOccurred: state.announcementReducer.timeoutOccurred
+        timeoutOccurred: state.announcementReducer.timeoutOccurred,
+        token: state.userReducer.token
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getAnnouncements: () => dispatch(getAnnouncements())
+        getAnnouncements: (token) => dispatch(getAnnouncements(token))
     }
 }
 

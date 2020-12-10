@@ -23,12 +23,12 @@ const itemsTimeout = () => ({
     type : ITEMS_TIMEOUT
 })
 
-export const getItems = () => async (dispatch) => {
+export const getItems = (token) => async (dispatch) => {
     dispatch(itemsLoading());
 
     //Do api call
-    var res = await QueryHandler.getItemSerials();
-    // console.log("Item Serials: " + JSON.stringify(res.data));
+    var res = await QueryHandler.getItemSerials(token);
+    //console.log("Item Serials: " + JSON.stringify(res.data));
     
     if (!res) {
         console.log("ItemFailure...");

@@ -16,7 +16,7 @@ class RewardProductComponent extends React.Component {
         console.log("Item Serial: " + this.props.serial);
         // Add a Toast on screen.
 
-        var res = await QueryHandler.purchaseItem(this.props.serial, this.props.uniqueID);
+        var res = await QueryHandler.purchaseItem(this.props.serial, this.props.uniqueID, this.props.token);
     }
 
     render() {

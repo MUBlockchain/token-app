@@ -9,19 +9,19 @@ class QueryHandler {
      * Get User Profile
      * @param {string} uniqueid 
      */
-    static signIn(userId) {
+    static signIn(token) {
 
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:8080/api/'
+            baseURL: 'http://mubc.io:8080/api/'
         });
         
         return instance.get('/signin', {
             params: {
-                id: userId
+                id: token
             }
         })
             .catch(function (error) {
-                console.log("Sigin Error: " + error);
+                console.log("Sigin Error: " + error.response.data);
             });
     }
 
@@ -29,17 +29,18 @@ class QueryHandler {
      * 
      * @param {*} uid MiamiOH Uid
      */
-    static getMUBCTokenBalance(uid) {
+    static getMUBCTokenBalance(uid, token) {
         console.log('API HANDLER')
 
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:8080/api/',
+            baseURL: 'http://mubc.io:8080/api/',
             timeout: 1000,
         });
 
         return instance.get('/balance', {
             params: {
-                uniqueid: uid
+                uniqueid: uid,
+                token: token
             }
         }).catch(function (error) {
             console.log(error);
@@ -49,14 +50,18 @@ class QueryHandler {
     /**
      * Get list of item serials
      */
-    static getItemSerials() {
+    static getItemSerials(token) {
 
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:8080/api/',
-            timeout: 1000,
+            baseURL: 'http://mubc.io:8080/api/',
+            timeout: 2000,
         });
 
-        return instance.get('/item/active')
+        return instance.get('/item/active', {
+            params: {
+                token: token
+            }
+        })
             .catch(function (error) {
                 console.log(error);
             });
@@ -67,44 +72,52 @@ class QueryHandler {
      * Get User Profile
      * @param {string} uniqueid 
      */
-    static getUserProfile(uniqueid) {
+    static getUserProfile(uniqueid, token) {
 
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:8080/api/',
+            baseURL: 'http://mubc.io:8080/api/',
             timeout: 1000,
         });
 
-        return instance.get('/user/' + uniqueid + '/profile')
-            .catch(function (error) {
-                console.log(error);
-            });
+        return instance.get('/user/' + uniqueid + '/profile', {
+            params: {
+                token: token
+            }
+        }).catch(function (error) {
+            console.log(error);
+        });
 
     }
 
     /**
      * Get Annoucements
      */
-    static getAnnouncements() {
-
+    static getAnnouncements(token) {
+        console.log("Get Announcements Toke: " + token)
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:8080/api/',
+            baseURL: 'http://mubc.io:8080/api/',
             timeout: 1000,
         });
 
-        return instance.get('/announcements')
+        return instance.get('/announcements/list', {
+            params: {
+                token: token
+            }
+        })
             .catch(function (error) {
                 console.log(error);
             });
     }
 
-    static purchaseItem(serial, uid) {
+    static purchaseItem(serial, uid, token) {
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:8080/api/'
+            baseURL: 'http://mubc.io:8080/api/'
         });
 
         return instance.get('/item/' + serial + '/purchase', {
             params: {
-                uniqueid: uid
+                uniqueid: uid,
+                token: token
             }
         })
             .catch(function (error) {
@@ -115,7 +128,7 @@ class QueryHandler {
 
     static registerUser(uuid, name) {
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:8080/api/'
+            baseURL: 'http://mubc.io:8080/api/'
         });
 
         return instance.get('/user/register', {
@@ -132,7 +145,7 @@ class QueryHandler {
 
     static mintToUser(uuid, amount, executive) {
         var instance = axios.create({
-            baseURL: 'http://app.mubc.io:8080/api/'
+            baseURL: 'http://mubc.io:8080/api/'
         });
 
         return instance.get('/user/' + uuid + '/mint', {

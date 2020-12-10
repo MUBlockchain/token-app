@@ -19,7 +19,7 @@ import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-com
 
 GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
-    webClientId: '733695350424-2otstlu8iurn4fq77l5f608ghks856ht.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+    webClientId: '1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
     offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
     // hostedDomain: '', // specifies a hosted domain restriction
     // loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
@@ -41,7 +41,9 @@ class LoginScreen extends React.Component {
             uuid: "",
             registerUuid: "",
             name: "",
-            refreshing: false
+            profilePic: "",
+            refreshing: false,
+            token: ""
         };
     }
 
@@ -61,18 +63,31 @@ class LoginScreen extends React.Component {
     signIn = async () => {
         try {
           const hasPlayServices = await GoogleSignin.hasPlayServices();
-          console.log(hasPlayServices);
 
           const userInfo = await GoogleSignin.signIn();
-          console.log(JSON.stringify(userInfo));
+          console.log("FLAG:" + JSON.stringify(userInfo));
 
           const id_token = await GoogleSignin.getTokens();
+          console.log("After Get Token");
           this.setState({ userInfo });
-          console.log(JSON.stringify(id_token.idToken));
+          console.log(id_token.idToken);
           
           const r = await QueryHandler.signIn(id_token.idToken);
-          console.log(r);
+          console.log("After Query Handler");
+          var email = r.data.userid.email;
+          //console.log(email.substring(0, email.length - 12));
+          //console.log(r.data.userid.picture);
+          //console.log("Token: " + JSON.stringify(id_token));
+          this.setState({ profilePic : r.data.userid.picture});
+          this.setState({ token: id_token.idToken});
+          this.setState({ refreshing: true });
+          
+          console.log("UserProfile");
+          await this.props.getUserProfile(email.substring(0, email.length - 12), id_token.idToken, r.data.userid.picture);
+          this.setState({ refreshing: false });
+          console.log("Navigate");
           this.props.navigation.navigate('Drawer');
+        
         } catch (error) {
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // user cancelled the login flow
@@ -86,7 +101,7 @@ class LoginScreen extends React.Component {
           } else {
             // some other error happened
             console.log("some other error happened");
-            console.log(error);
+            console.log("ERROR: " + JSON.stringify(error));
           }
         }
       };
@@ -158,13 +173,15 @@ const mapStateToProps = (state) => {
         name: state.userReducer.name,
         uuid: state.userReducer.uuid,
         balance: state.userReducer.balance,
-        purchases: state.userReducer.purchases
+        purchases: state.userReducer.purchases,
+        profilePic: state.userReducer.profilePic,
+        token: state.userReducer.token
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getUserProfile: (uuid) => dispatch(getUserProfile(uuid))
+        getUserProfile: (uuid, token, profilePic) => dispatch(getUserProfile(uuid, token, profilePic))
     }
 }
 

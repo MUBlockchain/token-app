@@ -1,38 +1,74 @@
 {
   "project_info": {
-    "project_number": "733695350424",
-    "firebase_url": "https://mubcapp.firebaseio.com",
-    "project_id": "mubcapp",
-    "storage_bucket": "mubcapp.appspot.com"
+    "project_number": "1062557508086",
+    "firebase_url": "https://mubc-rn-app.firebaseio.com",
+    "project_id": "mubc-rn-app",
+    "storage_bucket": "mubc-rn-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:733695350424:android:e8b8f501dfcc85759262ed",
+        "mobilesdk_app_id": "1:1062557508086:android:7a6043fc400f047d3ea7d7",
         "android_client_info": {
           "package_name": "com.mubcapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "733695350424-5fek4sv9tsgfkc4p8jmfs0p66ba615t2.apps.googleusercontent.com",
+          "client_id": "1062557508086-nttps6rmad0bkde5p3iandalaeteg10a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mubcapp",
+            "certificate_hash": "05a74307d6ee30c6b4c082840ab20f448b2af0e1"
+          }
+        },
+        {
+          "client_id": "1062557508086-96qq2lglbf0nud5tqfoorvhu3lvolr35.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mubcapp",
+            "certificate_hash": "6b95cf90f3ca0425f55292c1234c31ce23de5e03"
+          }
+        },
+        {
+          "client_id": "1062557508086-jai9gqqojr1i90evh46h1hp360devgst.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mubcapp",
+            "certificate_hash": "f5ca06a2cf2eb5463e27de93e2e95a6a3eb88e98"
+          }
+        },
+        {
+          "client_id": "1062557508086-h6mvil09lfq426cvmssdl4srh0cku165.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mubcapp",
+            "certificate_hash": "d4c41386b0caaa351198c8daf157702180953f02"
+          }
+        },
+        {
+          "client_id": "1062557508086-2d6hlkrifs92l074logjtl23vr44jdgn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.mubcapp",
             "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
+        },
+        {
+          "client_id": "1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBhP2x6cEGe-WagPP2o0xfiERZcziasYaM"
+          "current_key": "AIzaSyCdO55ooh8LjcM4dQNYlQ3DVYpenMfbRuU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "733695350424-ufdbr57iqi9npe7u0nu8gh935p4icpi3.apps.googleusercontent.com",
+              "client_id": "1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

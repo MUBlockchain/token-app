@@ -7,6 +7,7 @@ import RewardProductComponent from '../components/RewardProductComponent';
 import { connect } from 'react-redux';
 import { getItems } from '../redux/actions/itemActions'
 import { getUserProfile } from '../redux/actions/userActions';
+import userReducer from '../redux/reducers/userReducer';
 
 class RewardsScreen extends React.Component {
     constructor(props) {
@@ -62,10 +63,11 @@ class RewardsScreen extends React.Component {
         var pItems = [];
         var npItems = [];
         
-        await this.props.getItems();
+        console.log("Items: " + this.props.token)
+        await this.props.getItems(this.props.token);
 
         this.props.items.forEach(item => {
-            if (item.purchasers.includes(this.props.userId)) {
+            if (item.purchasers.includes(this.props.userId, this.props.token)) {
                 pItems.push(item);
             } else {
                 npItems.push(item);
@@ -115,6 +117,7 @@ class RewardsScreen extends React.Component {
                 pic=""
                 serial={item.serial}
                 uniqueID={this.props.uniqueID}
+                token={this.props.token}
             />;
         });
     }
@@ -179,14 +182,15 @@ const mapStateToProps = (state) => {
         placeholder: state.itemReducer.placeholder,
         timeoutOccurred: state.itemReducer.timeoutOccurred,
         userId: state.userReducer.uuid,
-        uniqueID: state.userReducer.uniqueID
+        uniqueID: state.userReducer.uniqueID,
+        token: state.userReducer.token
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getItems: () => dispatch(getItems()),
-        getUserProfile: (uuid) => dispatch(getUserProfile(uuid))
+        getItems: (token) => dispatch(getItems(token)),
+        getUserProfile: (uuid, token) => dispatch(getUserProfile(uuid, token))
     }
 }
 

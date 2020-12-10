@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { SafeAreaView, withNavigation } from 'react-navigation';
-import { Image } from 'react-native-elements';
 import { DrawerItems } from 'react-navigation-drawer';
 import { connect } from 'react-redux';
 
@@ -11,7 +10,7 @@ class DrawerComponent extends React.Component {
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.header}>
-                    <Image source={require('../images/logo.png')} style={styles.profilePic} />
+                    <Image source={{uri: this.props.profilePic}} style={styles.profilePic} />
                     <Text style={styles.name}>{this.props.name}</Text>
                     <Text style={styles.balance}>MUBC Token's: {this.props.balance}</Text>
                 </View>
@@ -29,7 +28,8 @@ class DrawerComponent extends React.Component {
 const mapStateToProps = (state) => {
     return {
         name: state.userReducer.name,
-        balance: state.userReducer.balance
+        balance: state.userReducer.balance,
+        profilePic: state.userReducer.profilePic
     }
 }
 

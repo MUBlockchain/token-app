@@ -18,9 +18,6 @@ class AnnouncementComponent extends React.Component {
                             </View>
                         </View>
                         <View style={styles.subRowEnd}>
-                            <View style={styles.date}>
-                                <Text style={styles.dateText}>{this.props.date.substring(5, 10)}</Text>
-                            </View>
                         </View>
                     </View>
                     <View style={styles.content}>
