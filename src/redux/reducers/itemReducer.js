@@ -1,13 +1,16 @@
 
-import { ITEMS_LOADING, ITEMS_SUCCESS, ITEMS_FAILURE, ITEMS_TIMEOUT } from '../actions/constants';
+import { ITEMS_LOADING, ITEMS_SUCCESS, ITEMS_FAILURE, ITEMS_TIMEOUT, ITEMS_SELECT } from '../actions/constants';
 
 const initItemsState = {
     isLoading: false,
     items: [],
+    pItems: [],
+    npItems: [],
     errorBack: false,
     error: '',
     placeholder: 'There are currenlty no items for you to purchase!',
-    timeoutOccurred: false
+    timeoutOccurred: false,
+    selectedItem: ''
 }
 
 
@@ -27,7 +30,9 @@ const itemReducer = (state = initItemsState, action) => {
                 isLoading: false,
                 errorBack: false,
                 timeoutOccurred: false,
-                items: action.data
+                pItems: action.pItems,
+                npItems: action.npItems,
+                items: action.items
             };
         case ITEMS_FAILURE:
             return {
@@ -44,7 +49,12 @@ const itemReducer = (state = initItemsState, action) => {
                 timeoutOccurred: true,
                 errorBack: true,
                 error: 'Connection Timeout to API'
-            };    
+            };
+        case ITEMS_SELECT:
+            return { 
+                ...state,
+                selectedItem: action.title 
+            };
         default:
             return state;
     }
