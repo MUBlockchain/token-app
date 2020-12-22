@@ -15,6 +15,7 @@ import { getUserProfile } from '../../redux/actions/userActions';
 import QueryHandler from '../../api/QueryHandler';
 import Toast from 'react-native-root-toast';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
+import RNTorusDirectSdk from '@toruslabs/torus-direct-react-native-sdk';
 
 
 GoogleSignin.configure({
@@ -49,6 +50,9 @@ class LoginScreen extends React.Component {
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        RNTorusDirectSdk.init({
+            redirectUri: 'com.mubcapp/redirect.html'
+        })
     }
 
     componentWillUnmount() {
@@ -62,31 +66,38 @@ class LoginScreen extends React.Component {
 
     signIn = async () => {
         try {
-          const hasPlayServices = await GoogleSignin.hasPlayServices();
+            console.log(RNTorusDirectSdk)
+            const loginDetails = await RNTorusDirectSdk.triggerLogin({
+                typeOfLogin: 'google',
+                verifier: 'mubc-google',
+                clientId: '1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com',
+              });
+            console.log('FLAG: ', loginDetails);
+        //   const hasPlayServices = await GoogleSignin.hasPlayServices();
 
-          const userInfo = await GoogleSignin.signIn();
-          console.log("FLAG:" + JSON.stringify(userInfo));
+        //   const userInfo = await GoogleSignin.signIn();
+        //   console.log("FLAG:" + JSON.stringify(userInfo));
 
-          const id_token = await GoogleSignin.getTokens();
-          console.log("After Get Token");
-          this.setState({ userInfo });
-          console.log(id_token.idToken);
+        //   const id_token = await GoogleSignin.getTokens();
+        //   console.log("After Get Token");
+        //   this.setState({ userInfo });
+        //   console.log(id_token.idToken);
           
-          const r = await QueryHandler.signIn(id_token.idToken);
-          console.log("After Query Handler");
-          var email = r.data.userid.email;
-          //console.log(email.substring(0, email.length - 12));
-          //console.log(r.data.userid.picture);
-          //console.log("Token: " + JSON.stringify(id_token));
-          this.setState({ profilePic : r.data.userid.picture});
-          this.setState({ token: id_token.idToken});
-          this.setState({ refreshing: true });
+        //   const r = await QueryHandler.signIn(id_token.idToken);
+        //   console.log("After Query Handler");
+        //   var email = r.data.userid.email;
+        //   //console.log(email.substring(0, email.length - 12));
+        //   //console.log(r.data.userid.picture);
+        //   //console.log("Token: " + JSON.stringify(id_token));
+        //   this.setState({ profilePic : r.data.userid.picture});
+        //   this.setState({ token: id_token.idToken});
+        //   this.setState({ refreshing: true });
           
-          console.log("UserProfile");
-          await this.props.getUserProfile(email.substring(0, email.length - 12), id_token.idToken, r.data.userid.picture);
-          this.setState({ refreshing: false });
-          console.log("Navigate");
-          this.props.navigation.navigate('Drawer');
+        //   console.log("UserProfile");
+        //   await this.props.getUserProfile(email.substring(0, email.length - 12), id_token.idToken, r.data.userid.picture);
+        //   this.setState({ refreshing: false });
+        //   console.log("Navigate");
+        //   this.props.navigation.navigate('Drawer');
         
         } catch (error) {
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {

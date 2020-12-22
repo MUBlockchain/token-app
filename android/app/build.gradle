@@ -133,6 +133,11 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
         versionName "1.1"
+        manifestPlaceholders = [                
+            'torusRedirectScheme': 'MubcApp',                
+            'torusRedirectHost': 'com.mubcapp',                
+            'torusRedirectPathPrefix': '/redirect'        
+            ]
         multiDexEnabled true
     }
     splits {

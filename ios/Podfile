@@ -34,6 +34,8 @@ target 'MubcApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  pod 'RNTorusDirectSdk', :path => '../node_modules/@toruslabs/torus-direct-react-native-sdk'
+
   target 'MubcAppTests' do
     inherit! :search_paths
     # Pods for testing
