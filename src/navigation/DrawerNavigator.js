@@ -22,7 +22,8 @@ const drawerWidth = width * 0.70;
 const HomeStack = createStackNavigator({
     Home: {
         screen: HomeScreen
-    }
+    },
+    path: 'home'
 });
 
 /*

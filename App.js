@@ -6,12 +6,21 @@ import configureStore from './src/redux/index'
 
 
 const store = configureStore();
+const config = {
+    screens: {
+        DrawerNavigator: 'home'
+    }
+}
+const linking = {
+    prefixes: ['mubcapp://'],
+    config
+}
 
 class App extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <AppNavigator />
+                <AppNavigator linking={linking}/>
             </Provider>
         );
     }
