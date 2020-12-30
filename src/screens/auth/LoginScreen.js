@@ -12,7 +12,7 @@ import { SafeAreaView, withNavigation } from 'react-navigation';
 import { Input, Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { ethers } from 'ethers'
-import { getUserProfile } from '../../redux/actions/userActions';
+import { saveUserInformation } from '../../redux/actions/userActions';
 import QueryHandler from '../../api/QueryHandler';
 import Toast from 'react-native-root-toast';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
@@ -28,7 +28,7 @@ GoogleSignin.configure({
     // forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
     // accountName: '', // [Android] specifies an account name on the device that should be used
     // iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-  });
+});
 
 // GoogleSignin.configure();
 class LoginScreen extends React.Component {
@@ -75,69 +75,74 @@ class LoginScreen extends React.Component {
                 typeOfLogin: 'google',
                 verifier: 'mubc-google',
                 clientId: '1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com',
-              });
+            });
 
-              /* ===== User Info ==== */
-              const {privateKey, publicAddress, userInfo} = loginDetails
-              const {email, name, profileImage } = userInfo
+            /* ===== User Info ==== */
+            const { privateKey, publicAddress, userInfo } = loginDetails
+            const { email, name, profileImage } = userInfo
 
-              // This all needs to be bundeled into redux
-              console.log('PRIVATE KEY: ', privateKey)
-              console.log('PUBLIC ADDRESS: ', publicAddress)
-              console.log('EMAIL: ', email)
-              console.log('NAME: ', name)
-              console.log('PROFILE IMAGE: ', profileImage)
+            // This all needs to be bundeled into redux
+            console.log('PRIVATE KEY: ', privateKey)
+            console.log('PUBLIC ADDRESS: ', publicAddress)
+            console.log('EMAIL: ', email)
+            console.log('NAME: ', name)
+            console.log('PROFILE IMAGE: ', profileImage)
 
-            /* ==== Ethers Wallet ==== */  
+
+            /* ==== Ethers Wallet ==== */
             const provider = ethers.getDefaultProvider('rinkeby')
 
             /* ==== We need to pass this wallet through redux too ==== */
             const wallet = new ethers.Wallet(`0x${privateKey}`, provider)
-
+            
             console.log('WALLET: ', wallet)
-        
+
             //   const hasPlayServices = await GoogleSignin.hasPlayServices();
 
-        //   const userInfo = await GoogleSignin.signIn();
-        //   console.log("FLAG:" + JSON.stringify(userInfo));
+            //   const userInfo = await GoogleSignin.signIn();
+            //   console.log("FLAG:" + JSON.stringify(userInfo));
 
-        //   const id_token = await GoogleSignin.getTokens();
-        //   console.log("After Get Token");
-        //   this.setState({ userInfo });
-        //   console.log(id_token.idToken);
-          
-        //   const r = await QueryHandler.signIn(id_token.idToken);
-        //   console.log("After Query Handler");
-        //   var email = r.data.userid.email;
-        //   //console.log(email.substring(0, email.length - 12));
-        //   //console.log(r.data.userid.picture);
-        //   //console.log("Token: " + JSON.stringify(id_token));
-        //   this.setState({ profilePic : r.data.userid.picture});
-        //   this.setState({ token: id_token.idToken});
-          
-        //   console.log("UserProfile");
-        //   await this.props.getUserProfile(email.substring(0, email.length - 12), id_token.idToken, r.data.userid.picture);
-        this.setState({ refreshing: false });
-        console.log("Navigate");
-        this.props.navigation.navigate('Drawer');
-        
+            //   const id_token = await GoogleSignin.getTokens();
+            //   console.log("After Get Token");
+            //   this.setState({ userInfo });
+            //   console.log(id_token.idToken);
+
+            //   const r = await QueryHandler.signIn(id_token.idToken);
+            //   console.log("After Query Handler");
+            //   var email = r.data.userid.email;
+            //   //console.log(email.substring(0, email.length - 12));
+            //   //console.log(r.data.userid.picture);
+            //   //console.log("Token: " + JSON.stringify(id_token));
+            //   this.setState({ profilePic : r.data.userid.picture});
+            //   this.setState({ token: id_token.idToken});
+
+            //   console.log("UserProfile");
+            //   await this.props.getUserProfile(email.substring(0, email.length - 12), id_token.idToken, r.data.userid.picture);
+            
+            console.log('BEFORE SAVE USER INFO')
+            this.props.saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage);
+            console.log('AFTER SAVE USER INFO')
+            this.setState({ refreshing: false });
+            console.log("Navigate");
+            this.props.navigation.navigate('Drawer');
+
         } catch (error) {
-          if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-            // user cancelled the login flow
-            console.log("user cancelled the login flow");
-          } else if (error.code === statusCodes.IN_PROGRESS) {
-            // operation (f.e. sign in) is in progress already
-            console.log("operation (f.e. sign in) is in progress already");
-          } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-            // play services not available or outdated
-            console.log("play services not available or outdated");
-          } else {
-            // some other error happened
-            console.log("some other error happened");
-            console.log("ERROR: " + JSON.stringify(error));
-          }
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // user cancelled the login flow
+                console.log("user cancelled the login flow");
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                // operation (f.e. sign in) is in progress already
+                console.log("operation (f.e. sign in) is in progress already");
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                // play services not available or outdated
+                console.log("play services not available or outdated");
+            } else {
+                // some other error happened
+                console.log("some other error happened");
+                console.log("ERROR: " + JSON.stringify(error));
+            }
         }
-      };
+    };
 
     loginHandler = async () => {
         //Store uuid in store
@@ -151,7 +156,7 @@ class LoginScreen extends React.Component {
         //Store uuid in store
         this.setState({ refreshing: true });
         console.log("Registering User...");
-        
+
         let toast = Toast.show('Register User...', {
             duration: Toast.durations.LONG,
             position: Toast.positions.BOTTOM,
@@ -177,7 +182,7 @@ class LoginScreen extends React.Component {
         } else {
 
         }
-        
+
     }
 
     render() {
@@ -214,7 +219,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getUserProfile: (uuid, token, profilePic) => dispatch(getUserProfile(uuid, token, profilePic))
+        getUserProfile: (uuid, token, profilePic) => dispatch(getUserProfile(uuid, token, profilePic)),
+        saveUserInformation: (privateKey, publicAddress, wallet, email, name, profileImage) => dispatch(saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage))
     }
 }
 
@@ -237,22 +243,22 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold'
     },
-    signIn:{
-        marginRight:40,
-        marginLeft:40,
-        marginTop:25,
-        paddingTop:20,
-        paddingBottom:20,
-        paddingRight:45,
-        paddingLeft:45,
-        backgroundColor:'#C9102E',
-        borderRadius:40,
+    signIn: {
+        marginRight: 40,
+        marginLeft: 40,
+        marginTop: 25,
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingRight: 45,
+        paddingLeft: 45,
+        backgroundColor: '#C9102E',
+        borderRadius: 40,
         borderWidth: 0,
         borderColor: '#fff'
-      },
-      signInText:{
-          color:'#fff',
-          textAlign:'center',
-          fontSize:16
-      }
+    },
+    signInText: {
+        color: '#fff',
+        textAlign: 'center',
+        fontSize: 16
+    }
 });

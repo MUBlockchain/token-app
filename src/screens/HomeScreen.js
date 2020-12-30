@@ -18,7 +18,7 @@ class HomeScreen extends React.Component {
                         onPress={() => navigation.toggleDrawer()}
                         color="#000000"
                     />
-                </View>,
+                </View>
         };
     };
 
@@ -32,8 +32,8 @@ class HomeScreen extends React.Component {
     }
 
     async componentDidMount() {
-        await this.props.getAnnouncements(this.props.token);
-
+        //await this.props.getAnnouncements(this.props.token);
+        console.log('HOME SCREEN PRIVATE KEY: ' + this.props.privateKey)
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -127,7 +127,8 @@ const mapStateToProps = (state) => {
         errorBack: state.announcementReducer.errorBack,
         error: state.announcementReducer.error,
         timeoutOccurred: state.announcementReducer.timeoutOccurred,
-        token: state.userReducer.token
+        token: state.userReducer.token,
+        privateKey: state.userReducer.privateKey
     }
 }
 
