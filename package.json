@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@react-native-community/google-signin": "^4.0.3",
     "@react-native-community/masked-view": "^0.1.6",
     "@react-native-firebase/app": "^6.7.1",
@@ -18,7 +19,6 @@
     "ethers": "^5.0.24",
     "react": "16.9.0",
     "react-native": "^0.62.2",
-    "react-native-dotenv": "^2.4.3",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "^1.5.6",
     "react-native-popup-menu": "^0.15.6",
@@ -42,7 +42,8 @@
     "babel-jest": "24.9.0",
     "eslint": "6.8.0",
     "jest": "24.9.0",
-    "metro-react-native-babel-preset": "0.56.4",
+    "metro-react-native-babel-preset": "^0.56.4",
+    "react-native-dotenv": "^2.4.3",
     "react-test-renderer": "16.9.0"
   },
   "jest": {
