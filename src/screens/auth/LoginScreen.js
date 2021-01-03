@@ -11,8 +11,8 @@ import { StyleSheet, Image, BackHandler, TouchableHighlight, Text } from 'react-
 import { SafeAreaView, withNavigation } from 'react-navigation';
 import { Input, Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { ethers } from 'ethers'
 import { saveUserInformation } from '../../redux/actions/userActions';
+import { createContract } from '../../redux/actions/contractActions'
 import QueryHandler from '../../api/QueryHandler';
 import Toast from 'react-native-root-toast';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
@@ -81,21 +81,6 @@ class LoginScreen extends React.Component {
             const { privateKey, publicAddress, userInfo } = loginDetails
             const { email, name, profileImage } = userInfo
 
-            // This all needs to be bundeled into redux
-            console.log('PRIVATE KEY: ', privateKey)
-            console.log('PUBLIC ADDRESS: ', publicAddress)
-            console.log('EMAIL: ', email)
-            console.log('NAME: ', name)
-            console.log('PROFILE IMAGE: ', profileImage)
-
-
-            /* ==== Ethers Wallet ==== */
-            const provider = ethers.getDefaultProvider('rinkeby')
-
-            /* ==== We need to pass this wallet through redux too ==== */
-            const wallet = new ethers.Wallet(`0x${privateKey}`, provider)
-            
-            console.log('WALLET: ', wallet)
 
             //   const hasPlayServices = await GoogleSignin.hasPlayServices();
 
@@ -119,9 +104,11 @@ class LoginScreen extends React.Component {
             //   console.log("UserProfile");
             //   await this.props.getUserProfile(email.substring(0, email.length - 12), id_token.idToken, r.data.userid.picture);
             
-            console.log('BEFORE SAVE USER INFO')
-            this.props.saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage);
-            console.log('AFTER SAVE USER INFO')
+            // Save user information to app state
+            this.props.saveUserInformation(privateKey, publicAddress, email, name, profileImage);
+
+            // Create ethers contract instance
+            this.props.createContract(privateKey);
             this.setState({ refreshing: false });
             console.log("Navigate");
             this.props.navigation.navigate('Drawer');
@@ -220,7 +207,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         getUserProfile: (uuid, token, profilePic) => dispatch(getUserProfile(uuid, token, profilePic)),
-        saveUserInformation: (privateKey, publicAddress, wallet, email, name, profileImage) => dispatch(saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage))
+        saveUserInformation: (privateKey, publicAddress, wallet, email, name, profileImage) => dispatch(saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage)),
+        createContract: privateKey => dispatch(createContract(privateKey))
     }
 }
 

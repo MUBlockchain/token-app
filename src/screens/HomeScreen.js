@@ -33,7 +33,7 @@ class HomeScreen extends React.Component {
 
     async componentDidMount() {
         //await this.props.getAnnouncements(this.props.token);
-        console.log('HOME SCREEN PRIVATE KEY: ' + this.props.privateKey)
+        console.log('PROPS: ', props)
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -128,7 +128,8 @@ const mapStateToProps = (state) => {
         error: state.announcementReducer.error,
         timeoutOccurred: state.announcementReducer.timeoutOccurred,
         token: state.userReducer.token,
-        privateKey: state.userReducer.privateKey
+        privateKey: state.userReducer.privateKey,
+        contract: state.contractReducer.contract
     }
 }
 
