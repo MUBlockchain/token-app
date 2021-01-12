@@ -31,9 +31,10 @@ class HomeScreen extends React.Component {
         };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         //await this.props.getAnnouncements(this.props.token);
-        console.log('PROPS: ', props)
+        //console.log('PROPS: ', props)
+        //console.log('ANNOUCMENTS: ', this.props.annoucementContract)
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -60,15 +61,19 @@ class HomeScreen extends React.Component {
         });
     }
 
-    async _onRefresh () {
+    _onRefresh () {
         console.log(this.props.isLoading)
         this.setState({refreshing: true})
-        await this.props.getAnnouncements(this.props.token);
+        //await this.props.getAnnouncements(this.props.token);
         this.setState({refreshing: false})
     }
 
 
     render() {
+        return (
+            <Text>Hello World</Text>
+        )
+        /*
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
         // console.log("Announcements Error: " + this.props.error)
         
@@ -108,19 +113,21 @@ class HomeScreen extends React.Component {
                                     onRefresh={this._onRefresh}
                                 />
                             }>
-                            {this.renderAnnouncementsComponent()}
+                            {//{this.renderAnnouncementsComponent()} 
+                            }
                         </ScrollView>
                     </View>
                 </SafeAreaView>
             );
 
         }
+        */
     }
 }
 
 
 const mapStateToProps = (state) => {
-    console.log(state);
+    //console.log(state);
     return {
         isLoading: state.announcementReducer.isLoading,
         announcements: state.announcementReducer.announcements,
@@ -129,7 +136,7 @@ const mapStateToProps = (state) => {
         timeoutOccurred: state.announcementReducer.timeoutOccurred,
         token: state.userReducer.token,
         privateKey: state.userReducer.privateKey,
-        contract: state.contractReducer.contract
+        annoucementContract: state.contractReducer.annoucementContract
     }
 }
 
