@@ -18,6 +18,17 @@ import Toast from 'react-native-root-toast';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import RNTorusDirectSdk from '@toruslabs/torus-direct-react-native-sdk';
 
+GoogleSignin.configure({
+    // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+    webClientId: '1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+    offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    // hostedDomain: '', // specifies a hosted domain restriction
+    // loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
+    // forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+    // accountName: '', // [Android] specifies an account name on the device that should be used
+    // iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+});
+
 class LoginScreen extends React.Component {
 
     static navigationOptions = {
@@ -74,7 +85,8 @@ class LoginScreen extends React.Component {
             console.log('PublicAddress: ', publicAddress)
             
             // Create ethers contract instance
-            this.props.createContract(privateKey);
+            console.log("Creating Contract...");
+            await this.props.createContract(privateKey);
             console.log("Contract Created");
 
             this.setState({ refreshing: false });
