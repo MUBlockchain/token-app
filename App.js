@@ -3,8 +3,6 @@ import AppNavigator from './src/navigation/AppNavigator';
 import { Provider } from 'react-redux';
 import configureStore from './src/redux/index'
 
-
-
 const store = configureStore();
 const config = {
     screens: {

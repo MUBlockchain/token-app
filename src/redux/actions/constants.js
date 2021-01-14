@@ -2,6 +2,7 @@ export const ITEMS_LOADING = 'ITEMS_LOADING';
 export const ITEMS_SUCCESS = 'ITEMS_SUCCESS';
 export const ITEMS_FAILURE = 'ITEMS_FAILURE';
 export const ITEMS_TIMEOUT = 'ITEMS_TIMEOUT';
+export const ITEMS_SELECT  = 'ITEMS_SELECT';
 
 export const USER_LOADING = 'USER_LOADING';
 export const USER_SUCCESS = 'USER_SUCCESS';
