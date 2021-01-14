@@ -9,6 +9,7 @@ import RedeemScreen from '../screens/RedeemScreen';
 import RewardsScreen from '../screens/RewardsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
+import RewardsOverviewScreen from '../screens/RewardsOverviewScreen'
 
 /**
  * Variables
@@ -36,6 +37,9 @@ const RedeemStack = createStackNavigator({
 const RewardsStack = createStackNavigator({
     Rewards: {
         screen: RewardsScreen
+    },
+    RewardsOverview: {
+        screen: RewardsOverviewScreen
     }
 });
 

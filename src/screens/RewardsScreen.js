@@ -7,7 +7,7 @@ import RewardProductComponent from '../components/RewardProductComponent';
 import { connect } from 'react-redux';
 import { getItems } from '../redux/actions/itemActions'
 import { getUserProfile } from '../redux/actions/userActions';
-import userReducer from '../redux/reducers/userReducer';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 
 class RewardsScreen extends React.Component {
     constructor(props) {
@@ -16,13 +16,34 @@ class RewardsScreen extends React.Component {
             refreshing: false,
             msg: "Error",
             pItems: [],
-            npItems: []
+            npItems: [],
+            index: 0,
+            routes: [
+                { key: 'first', title: 'Available' },
+                { key: 'second', title: 'Purchased' }
+            ]
         };
     }
 
+    handleIndexChange = (index) => {
+        this.setState({
+            index
+        })
+    }
+
+    renderTabBar = (props) => {
+        return (
+            <TabBar
+                {...props}
+                indicatorStyle={styles.indicator}
+                style={styles.tabbar}
+                tabStyle={styles.tab}
+                labelStyle={styles.label}
+            />
+        )
+    }
 
     static navigationOptions = ({ navigation }) => {
-        const { params = {} } = navigation.state;
         return {
             title: "Rewards",
             headerLeft: () =>
@@ -32,14 +53,13 @@ class RewardsScreen extends React.Component {
                         onPress={() => navigation.toggleDrawer()}
                         color="#000000"
                     />
-                </View>,
+                </View>
         };
     };
 
     async componentDidMount() {
-        await this.fillItemArrays();
-        // console.log("RewardsScreen: " + this.props.)
-        await this.props.getUserProfile(this.props.uniqueID);
+        await this.props.getItems(this.props.token, this.props.userId);
+        //await this.props.getUserProfile(this.props.uniqueID);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -54,55 +74,14 @@ class RewardsScreen extends React.Component {
 
     _onRefresh = async () => {
         this.setState({ refreshing: true });
-        this.fillItemArrays();
-        await this.props.getUserProfile(this.props.uniqueID);
+        await this.props.getItems(this.props.token, this.props.userId);
+        //await this.props.getUserProfile(this.props.uniqueID);
         this.setState({ refreshing: false });
     }
 
-    fillItemArrays = async () => {
-        var pItems = [];
-        var npItems = [];
-        
-        console.log("Items: " + this.props.token)
-        await this.props.getItems(this.props.token);
-
-        this.props.items.forEach(item => {
-            if (item.purchasers.includes(this.props.userId, this.props.token)) {
-                pItems.push(item);
-            } else {
-                npItems.push(item);
-            }
-        });
-        
-        console.log(pItems);
-
-        this.setState({
-            pItems: pItems,
-            npItems: npItems
-        });
-
-    }
-
-    renderItemComponents = () => {
-        console.log(this.props.userId);
-
-        var rendernpItems = this.state.npItems.length > 0;
-        var renderpItems = this.state.pItems.length > 0;
-
-        return (
-            <View>
-                {rendernpItems ? this.renderItems(this.state.npItems, "Not Purchased Items") : null}
-                {renderpItems ? this.renderItems(this.state.pItems, "Purchased Items") : null}
-            </View>
-        );
-    }
-
-    renderItems = (items, status) => {
+    renderItems = (items) => {
         return (
             <View style={[styles.roleSection]}>
-                <Text style={styles.roleText}>
-                    {status}
-                </Text>
                 {this.renderItemsHelper(items)}
             </View>
         );
@@ -118,15 +97,52 @@ class RewardsScreen extends React.Component {
                 serial={item.serial}
                 uniqueID={this.props.uniqueID}
                 token={this.props.token}
+                navigation={this.props.navigation}
             />;
         });
+    }
+
+    availableRewards = () => {
+        return (
+            <View style={styles.gridContainer}>
+                <ScrollView contentContainerStyle={[styles.gridContainer, styles.extraSpacing]}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh}
+                        />
+                    }>
+                    <View>
+                        {this.renderItems(this.props.npItems)}
+                    </View>
+                </ScrollView>
+            </View>
+        );
+    }
+
+    purchasedRewards = () => {
+        return (
+            <View style={styles.gridContainer}>
+                <ScrollView contentContainerStyle={[styles.gridContainer, styles.extraSpacing]}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh}
+                        />
+                    }>
+                    <View>
+                        {this.renderItems(this.props.pItems)}
+                    </View>
+                </ScrollView>
+            </View>
+        );
     }
 
     render() {
 
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
         // console.log("ITEMS Error: " + this.props.items.error)
-        
+
         if (this.props.items.length === 0) {
             if (this.props.isLoading && !this.state.refreshing) {
                 return (
@@ -154,24 +170,21 @@ class RewardsScreen extends React.Component {
             );
         } else {
             return (
-                <SafeAreaView style={styles.groupContainer}>
-                    <View style={styles.gridContainer}>
-                        <ScrollView contentContainerStyle={[styles.gridContainer, styles.extraSpacing]}
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={this.state.refreshing}
-                                    onRefresh={this._onRefresh}
-                                />
-                            }>
-                            {this.renderItemComponents()}
-                        </ScrollView>
-                    </View>
-                </SafeAreaView>
-            );
-
+                <TabView
+                    navigationState={this.state}
+                    renderScene={SceneMap({
+                        first: this.availableRewards,
+                        second: this.purchasedRewards,
+                    })}
+                    onIndexChange={this.handleIndexChange}
+                    renderTabBar={this.renderTabBar}
+                />
+            )
         }
+
     }
 }
+
 
 const mapStateToProps = (state) => {
     return {
@@ -181,6 +194,8 @@ const mapStateToProps = (state) => {
         error: state.itemReducer.error,
         placeholder: state.itemReducer.placeholder,
         timeoutOccurred: state.itemReducer.timeoutOccurred,
+        npItems: state.itemReducer.npItems,
+        pItems: state.itemReducer.pItems,
         userId: state.userReducer.uuid,
         uniqueID: state.userReducer.uniqueID,
         token: state.userReducer.token
@@ -189,7 +204,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getItems: (token) => dispatch(getItems(token)),
+        getItems: (token, userId) => dispatch(getItems(token, userId)),
         getUserProfile: (uuid, token) => dispatch(getUserProfile(uuid, token))
     }
 }
@@ -199,6 +214,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(Rewar
 
 
 const styles = StyleSheet.create({
+    scene: {
+        flex: 1,
+    },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -239,6 +257,19 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 5
+    },
+    tabbar: {
+        backgroundColor: '#FFFFFF',
+    },
+    tab: {
+        alignItems: 'center'
+    },
+    indicator: {
+        backgroundColor: 'red',
+    },
+    label: {
+        fontWeight: '600',
+        color: 'black'
     },
 
 });

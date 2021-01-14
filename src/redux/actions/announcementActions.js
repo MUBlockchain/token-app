@@ -25,10 +25,10 @@ const announcementsTimeout = () => ({
 
 export const getAnnouncements = (token) => async (dispatch) => {
     dispatch(announcementsLoading());
-    console.log("Announcement: " + token);
+    //console.log("Announcement: " + token);
     //Do api call
     var res = await QueryHandler.getAnnouncements(token);
-    console.log("Annoucement: " + JSON.stringify(res.data.announcements));
+    //console.log("Annoucement: " + JSON.stringify(res.data.announcements));
     if (!res) {
         console.log("Announcements Failure...");
         dispatch(announcementsFailure());
