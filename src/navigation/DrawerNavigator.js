@@ -10,6 +10,7 @@ import RewardsScreen from '../screens/RewardsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RewardsOverviewScreen from '../screens/RewardsOverviewScreen'
+import BountiesScreen from '../screens/BountiesScreen'
 
 /**
  * Variables
@@ -44,6 +45,12 @@ const RewardsStack = createStackNavigator({
     }
 });
 
+const BountiesStack = createStackNavigator({
+    Bounties : {
+        screen: BountiesScreen
+    }
+})
+
 const ProfileStack = createStackNavigator({
     Profile: {
         screen: ProfileScreen
@@ -65,6 +72,18 @@ const DrawerNavigator = createDrawerNavigator({
             drawerIcon: ({tintColor}) => 
                 <Icon 
                     name="home" 
+                    color={tintColor} 
+                    type="font-awesome" 
+                    size={24} 
+                />
+        }
+    },
+    Bounties: {
+        screen: BountiesStack,
+        navigationOptions: {
+            drawerIcon: ({tintColor}) => 
+                <Icon 
+                    name="gem" 
                     color={tintColor} 
                     type="font-awesome" 
                     size={24} 

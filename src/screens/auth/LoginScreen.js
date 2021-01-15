@@ -69,6 +69,7 @@ class LoginScreen extends React.Component {
     signIn = async () => {
         try {
             this.setState({ refreshing: true });
+            /*
             const loginDetails = await RNTorusDirectSdk.triggerLogin({
                 typeOfLogin: 'google',
                 verifier: 'mubc-google',
@@ -76,18 +77,33 @@ class LoginScreen extends React.Component {
             });
 
             /* ===== User Info ==== */
-            const { privateKey, publicAddress, userInfo } = loginDetails
-            const { email, name, profileImage } = userInfo
+            //const { privateKey, publicAddress, userInfo } = loginDetails
+            //const { email, name, profileImage } = userInfo
+            
+
+            /* ===== Dummy User Info ==== */
+            const privateKey = 'privateKey', publicAddress = 'publicAddress', userInfo = 'userInfo'
+            const email = 'cookepf@miamioh.edu', name = 'Peter', profileImage = 'profilePic'
+
 
             // Save user information to app state
             console.log("Save User Info");
-            this.props.saveUserInformation(privateKey, publicAddress, email, name, profileImage);
-            console.log('PublicAddress: ', publicAddress)
             
+
+            /* =====  Wallet Info ==== */
+            //const provider = ethers.getDefaultProvider('kovan')
+            //const wallet = new ethers.Wallet(`0x${privateKey}`, provider)
+            
+
+            /* ===== Dummy Wallet Info ==== */
+            const wallet = 'wallet';
+            this.props.saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage);
+            
+
             // Create ethers contract instance
-            console.log("Creating Contract...");
-            await this.props.createContract(privateKey);
-            console.log("Contract Created");
+            //console.log("Creating Contract...");
+            //await this.props.createContract(privateKey);
+            //console.log("Contract Created");
 
             this.setState({ refreshing: false });
             console.log("Navigate");

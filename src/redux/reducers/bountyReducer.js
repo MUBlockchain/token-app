@@ -1,30 +1,30 @@
 
-import { ITEMS_LOADING, ITEMS_SUCCESS, ITEMS_FAILURE, ITEMS_TIMEOUT, ITEMS_SELECT } from '../actions/constants';
+import { BOUNTY_LOADING, BOUNTY_SUCCESS, BOUNTY_FAILURE, BOUNTY_TIMEOUT, BOUNTY_SELECT } from '../actions/constants';
 
-const initItemsState = {
+const initBountyState = {
     isLoading: false,
-    pItems: [],
-    npItems: [],
-    items: [],
+    pBounties: [],
+    npBounties: [],
+    bounties: [],
     errorBack: false,
     error: '',
-    placeholder: 'There are currenlty no items for you to purchase!',
+    placeholder: 'There are currenlty no bounties for you to purchase!',
     timeoutOccurred: false,
     selectedItem: ''
 }
 
 
-const itemReducer = (state = initItemsState, action) => {
+const bountyReducer = (state = initBountyState, action) => {
     switch (action.type) {
-        case ITEMS_LOADING:
+        case BOUNTY_LOADING:
             return {
                 ...state,
                 isLoading: true,
                 errorBack: false,
-                placeHolder: 'There are currently no items for you to purchase!',
+                placeHolder: 'There are currently no bounties for you to purchase!',
                 timeoutOccurred: false
             };
-        case ITEMS_SUCCESS:
+        case BOUNTY_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
@@ -34,15 +34,15 @@ const itemReducer = (state = initItemsState, action) => {
                 npItems: action.npItems,
                 items: action.allItems
             };
-        case ITEMS_FAILURE:
+        case BOUNTY_FAILURE:
             return {
                 ...state,
                 isLoading: false,
                 errorBack: true,
                 timeoutOccurred: false,
-                error: 'Error while fetching Items'
+                error: 'Error while fetching bounties'
             };
-        case ITEMS_TIMEOUT:
+        case BOUNTY_TIMEOUT:
             return {
                 ...state,
                 isLoading: false,
@@ -50,14 +50,9 @@ const itemReducer = (state = initItemsState, action) => {
                 errorBack: true,
                 error: 'Connection Timeout to API'
             };
-        case ITEMS_SELECT:
-            return { 
-                ...state,
-                selectedItem: action.title 
-            };
         default:
             return state;
     }
 }
 
-export default itemReducer;
+export default bountyReducer;

@@ -9,7 +9,7 @@ import { getItems } from '../redux/actions/itemActions'
 import { getUserProfile } from '../redux/actions/userActions';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 
-class RewardsScreen extends React.Component {
+class BountiesScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,7 +20,7 @@ class RewardsScreen extends React.Component {
             index: 0,
             routes: [
                 { key: 'first', title: 'Available' },
-                { key: 'second', title: 'Purchased' }
+                { key: 'second', title: 'Claimed' }
             ]
         };
     }
@@ -45,7 +45,7 @@ class RewardsScreen extends React.Component {
 
     static navigationOptions = ({ navigation }) => {
         return {
-            title: "Rewards",
+            title: "Bounties",
             headerLeft: () =>
                 <View style={{ marginLeft: 10 }}>
                     <Icon
@@ -58,7 +58,7 @@ class RewardsScreen extends React.Component {
     };
 
     async componentDidMount() {
-        await this.props.getItems(this.props.wallet, this.props.purchasedItems);
+        await this.props.getBounties(this.props.wallet, this.props.purchasedBounties);
         //await this.props.getUserProfile(this.props.uniqueID);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
@@ -74,7 +74,7 @@ class RewardsScreen extends React.Component {
 
     _onRefresh = async () => {
         this.setState({ refreshing: true });
-        await this.props.getItems(this.props.wallet, this.props.purchasedItems);
+        await this.props.getBounties(this.props.wallet, this.props.purchasedBounties);
         //await this.props.getUserProfile(this.props.uniqueID);
         this.setState({ refreshing: false });
     }
@@ -139,11 +139,10 @@ class RewardsScreen extends React.Component {
     }
 
     render() {
-
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
         // console.log("ITEMS Error: " + this.props.items.error)
 
-        if (this.props.items.length === 0) {
+        if (this.props.bounties.length === 0) {
             if (this.props.isLoading && !this.state.refreshing) {
                 return (
                     <SafeAreaView style={styles.loadingContainer}>
@@ -188,29 +187,28 @@ class RewardsScreen extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        isLoading: state.itemReducer.isLoading,
-        errorBack: state.itemReducer.errorBack,
-        error: state.itemReducer.error,
-        placeholder: state.itemReducer.placeholder,
-        timeoutOccurred: state.itemReducer.timeoutOccurred,
-        npItems: state.itemReducer.npItems,
-        pItems: state.itemReducer.pItems,
-        items: state.itemReducer.items,
-        uniqueID: state.userReducer.uniqueID,
+        isLoading: state.bountyReducer.isLoading,
+        errorBack: state.bountyReducer.errorBack,
+        error: state.bountyReducer.error,
+        placeholder: state.bountyReducer.placeholder,
+        timeoutOccurred: state.bountyReducer.timeoutOccurred,
+        npBounties: state.bountyReducer.npItems,
+        pBounties: state.bountyReducer.pItems,
+        bounties: state.bountyReducer.items,
         wallet: state.userReducer.wallet,
-        purchasedItems: state.userReducer.items
+        purchasedBounties: state.userReducer.bounties
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getItems: (wallet, purchasedItems) => dispatch(getItems(wallet, purchasedItems)),
+        getBounties: (wallet, purchasedBounties) => dispatch(getItems(wallet, purchasedBounties)),
         getUserProfile: (uuid, token) => dispatch(getUserProfile(uuid, token))
     }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(RewardsScreen));
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(BountiesScreen));
 
 
 const styles = StyleSheet.create({

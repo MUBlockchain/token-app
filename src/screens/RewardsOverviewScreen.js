@@ -1,9 +1,8 @@
 import React from 'react';
 import { BackHandler } from 'react-native';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Image, TouchableHighlight } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import { Text } from 'react-native';
 import { connect } from 'react-redux';
 
 class RewardsOverviewScreen extends React.Component {
@@ -35,12 +34,23 @@ class RewardsOverviewScreen extends React.Component {
         return true;
     }
 
+    purchase() {
+
+    }
+
 
     render() {
         return (
             <SafeAreaView style={styles.viewStyles}>
+                <Image source={require('../images/logo.png')} style={styles.itemPic} />
                 <Text>{this.props.navigation.state.params.title}</Text>
                 <Text>{this.props.navigation.state.params.price}</Text>
+                <TouchableHighlight
+                    style={styles.signIn}
+                    onPress={this.purchase}
+                    underlayColor='#fff'>
+                    <Text style={[24, styles.signInText]}>Purchase Item</Text>
+                </TouchableHighlight>
             </SafeAreaView>
         );
     }

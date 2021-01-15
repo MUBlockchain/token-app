@@ -31,10 +31,8 @@ class HomeScreen extends React.Component {
         };
     }
 
-    componentDidMount() {
-        //await this.props.getAnnouncements(this.props.token);
-        //console.log('PROPS: ', props)
-        //console.log('ANNOUCMENTS: ', this.props.annoucementContract)
+    async componentDidMount() {
+        await this.props.getAnnouncements(this.props.wallet);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -48,32 +46,28 @@ class HomeScreen extends React.Component {
     }
 
     renderAnnouncementsComponent = () => {
-        console.log("renderAnnouncementsComponent...")
-        this.props.announcements.reverse();
+        console.log("renderAnnouncementsComponent...:", this.props.annoucements)
+        //this.props.annoucementContract.reverse();
         return this.props.announcements.map((announcement, i) => {
             return <GroupAnnouncementComponent
                 key={i}
-                author={announcement.author}
+                //author={announcement.author}
                 //date={annoucement.onCreated}
-                message={announcement.announcement}
+                message={announcement.body}
                 title={announcement.title}
             />
         });
     }
 
-    _onRefresh () {
+    async _onRefresh () {
         console.log(this.props.isLoading)
         this.setState({refreshing: true})
-        //await this.props.getAnnouncements(this.props.token);
+        await this.props.getAnnouncements(this.props.wallet);
         this.setState({refreshing: false})
     }
 
 
     render() {
-        return (
-            <Text>Hello World</Text>
-        )
-        /*
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
         // console.log("Announcements Error: " + this.props.error)
         
@@ -113,21 +107,19 @@ class HomeScreen extends React.Component {
                                     onRefresh={this._onRefresh}
                                 />
                             }>
-                            {//{this.renderAnnouncementsComponent()} 
-                            }
+                            {this.renderAnnouncementsComponent()}
                         </ScrollView>
                     </View>
                 </SafeAreaView>
             );
 
         }
-        */
+        
     }
 }
 
 
 const mapStateToProps = (state) => {
-    //console.log(state);
     return {
         isLoading: state.announcementReducer.isLoading,
         announcements: state.announcementReducer.announcements,
@@ -136,16 +128,16 @@ const mapStateToProps = (state) => {
         timeoutOccurred: state.announcementReducer.timeoutOccurred,
         token: state.userReducer.token,
         privateKey: state.userReducer.privateKey,
-        annoucementContract: state.contractReducer.annoucementContract
+        wallet: state.userReducer.wallet,
+        announcements: state.announcementReducer.announcements
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getAnnouncements: (token) => dispatch(getAnnouncements(token))
+        getAnnouncements: (wallet) => dispatch(getAnnouncements(wallet))
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(HomeScreen));
 

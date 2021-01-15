@@ -20,7 +20,7 @@ class RewardProductComponent extends React.Component {
     openReward = () => {
         //Might need to add a select reward to props
         //this.props.selectReward(this.props.key, this.props.title, this.props.itemPic, this.props.price);
-        
+        console.log("OPEN REWARD:", this.props)
         this.props.navigation.navigate('RewardsOverview',{
             title: this.props.title,
             price: this.props.price,

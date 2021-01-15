@@ -7,13 +7,16 @@ const initState = {
     wallet: '',
     email: '',
     name: '',
-    uuid: -1,
+    userContract:'',
+    twitterId: -1,
     balance: 0,
-    purchases: [],
-    profilePic: 'https://lh3.googleusercontent.com/-bDdZL2tOyTI/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclbHP9e-0lGGlWhg7K89k3ntLDwXA/s96-c/photo.jpg',
+    items: [],
+    bounties: [],
+    imageUrl: 'https://lh3.googleusercontent.com/-bDdZL2tOyTI/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclbHP9e-0lGGlWhg7K89k3ntLDwXA/s96-c/photo.jpg',
     isLoading: false,
-    token: ''
+    address: ''
 };
+
 const userReducer = (state = initState, action) => {
     switch (action.type) {
         case USER_LOADING:
@@ -30,6 +33,8 @@ const userReducer = (state = initState, action) => {
                 email: action.email,
                 name: action.name,
                 profilePic: action.profileImage,
+                items: action.items,
+                bounties: action.bounties,
                 isLoading: false
             };
         case USER_FAILURE:
@@ -58,6 +63,5 @@ const userReducer = (state = initState, action) => {
             return state;
     }
 }
-
 
 export default userReducer;
