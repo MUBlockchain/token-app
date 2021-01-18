@@ -58,6 +58,7 @@ class RewardsScreen extends React.Component {
     };
 
     async componentDidMount() {
+        console.log('purchased Items:', this.props.purchasedItems)
         await this.props.getItems(this.props.wallet, this.props.purchasedItems);
         //await this.props.getUserProfile(this.props.uniqueID);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
@@ -91,12 +92,15 @@ class RewardsScreen extends React.Component {
         return items.map((item, i) => {
             return <RewardProductComponent
                 key={i}
-                title={item.description}
-                price={item.cost}
-                pic=""
-                serial={item.serial}
-                uniqueID={this.props.uniqueID}
-                token={this.props.token}
+                title={item.title}
+                description={item.description}
+                imageUrl={item.imageUrl}
+                cost={item.cost}
+                infinite={item.infinite}
+                quantity={item.quantity}
+                active={item.active}
+                itemIndex={item.itemIndex}
+                isOwned={item.isOwned}
                 navigation={this.props.navigation}
             />;
         });

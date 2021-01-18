@@ -10,7 +10,8 @@ const initItemsState = {
     error: '',
     placeholder: 'There are currenlty no items for you to purchase!',
     timeoutOccurred: false,
-    selectedItem: ''
+    selectedItem: '',
+    itemContract: ''
 }
 
 
@@ -32,7 +33,8 @@ const itemReducer = (state = initItemsState, action) => {
                 timeoutOccurred: false,
                 pItems: action.pItems,
                 npItems: action.npItems,
-                items: action.allItems
+                items: action.allItems,
+                itemContract: action.itemContract
             };
         case ITEMS_FAILURE:
             return {
@@ -53,7 +55,7 @@ const itemReducer = (state = initItemsState, action) => {
         case ITEMS_SELECT:
             return { 
                 ...state,
-                selectedItem: action.title 
+                selectedItem: action.itemIndex 
             };
         default:
             return state;

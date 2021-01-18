@@ -3,10 +3,14 @@ import {
     ITEMS_SUCCESS, 
     ITEMS_FAILURE, 
     ITEMS_TIMEOUT,
-    ITEMS_SELECT
+    ITEMS_SELECT,
+    ITEMS_PURCHASING,
+    ITEMS_PURCHASED
 } from './constants';
-import "react-native-get-random-values"
-import "@ethersproject/shims"
+//import "react-native-get-random-values"
+//import "@ethersproject/shims"
+
+import "@ethersproject/shims/dist/index.js"
 import { ethers } from 'ethers'
 
 const Items = require('../../abi/Items.json')
@@ -15,11 +19,12 @@ const itemsLoading = () => ({
     type: ITEMS_LOADING
 })
 
-const itemsSuccess = (pItems, npItems, allItems) => ({
+const itemsSuccess = (pItems, npItems, allItems, itemContract) => ({
     type: ITEMS_SUCCESS,
     pItems,
     npItems,
-    allItems
+    allItems,
+    itemContract
 })
 
 const itemsFailure = () => ({
@@ -30,18 +35,32 @@ const itemsTimeout = () => ({
     type : ITEMS_TIMEOUT
 })
 
-const selectRewardHelper = (rewardId, title, pic, price) => ({
+const itemsPurchasing = () => ({
+    type : ITEMS_PURCHASING
+})
+
+const itemsPurchased = () => ({
+    type : ITEMS_PURCHASED
+})
+
+const selectRewardHelper = (itemIndex) => ({
     type: ITEMS_SELECT,
-    rewardId,
-    title,
-    pic,
-    price
+    itemIndex
 });
 
+export const purchaseItem = (index, itemContract) => async (dispatch) => {
+    dispatch(itemsPurchasing())
 
-export const selectReward = (rewardId, title, pic, price) => (dispatch) => {
-    console.log('Actions: ' + price);
-    dispatch(selectRewardHelper(rewardId, title, pic, price))
+    console.log('FLAG Purchase ITEM', itemContract)
+    const item = await itemContract.buyItem(index);
+    console.log('FLAG ITEM Purchased', item)
+    
+    dispatch(itemsPurchased())
+}
+
+export const selectReward = (itemIndex) => (dispatch) => {
+    console.log('Select Reward: ' + itemIndex);
+    dispatch(selectRewardHelper(itemIndex))
 }
 
 export const getItems = (wallet, purchased) => async (dispatch) => {
@@ -49,10 +68,13 @@ export const getItems = (wallet, purchased) => async (dispatch) => {
 
     try {
         /* =====  Item getItems ==== */
-        //const itemContract = new ethers.Contract('0xDc8e83240f8271769119B56A85B0e788a43A3a25', Items, wallet)
-        //const items = await itemContract.getItems();
-
+        console.log('FLAG 2 Wallet: ', wallet)
+        const itemContract = new ethers.Contract('0xDc8e83240f8271769119B56A85B0e788a43A3a25', Items, wallet)
+        console.log('FLAG 3', itemContract)
+        const items = await itemContract.getItems();
+        console.log('FLAG 4:', JSON.stringify(items))
         /* ===== Dummy Items getItems Response ==== */
+        /*
         const items = {
             "_itemNonce": "itemNonce",
             "_titles": [
@@ -84,23 +106,28 @@ export const getItems = (wallet, purchased) => async (dispatch) => {
                 'true'
             ]
         }
+        */
 
         var pItems = [];
         var npItems = [];
         var allItems = [];
 
-        for (index = 0; index < items._titles.length; index++) {
+        for (index = 0; index < items[1].length; index++) {
+            let isOwned = purchased.includes(index)
+
             var obj = {
-                title: items._titles[index],
-                description: items._descriptions[index],
-                imageUrl: items._imageUrls[index],
-                cost: items._costs[index],
-                infinite: items._infinites[index],
-                quantity: items._quantities[index],
-                active: items._actives[index]
+                title: items[1][index],
+                description: items[2][index],
+                imageUrl: items[3][index],
+                cost: items[4][index].toNumber(),
+                infinite: items[5][index],
+                quantity: items[6][index].toNumber(),
+                active: items[7][index],
+                isOwned: isOwned,
+                itemIndex: index
             }
             
-            if (purchased.includes(index)) {
+            if (isOwned) {
                 pItems.push(obj)
             } else {
                 npItems.push(obj)
@@ -111,7 +138,7 @@ export const getItems = (wallet, purchased) => async (dispatch) => {
 
         console.log("itemActions: ", allItems)
 
-        dispatch(itemsSuccess(pItems, npItems, allItems));
+        dispatch(itemsSuccess(pItems, npItems, allItems, itemContract));
     } catch (e) {
         console.log(e)
     }

@@ -5,6 +5,9 @@
  * @format
  * @flow
  */
+import "react-native-get-random-values"
+import "@ethersproject/shims"
+import { ethers } from 'ethers'
 
 import React from 'react';
 import { StyleSheet, Image, BackHandler, TouchableHighlight, Text } from 'react-native';
@@ -82,7 +85,7 @@ class LoginScreen extends React.Component {
             
 
             /* ===== Dummy User Info ==== */
-            const privateKey = 'privateKey', publicAddress = 'publicAddress', userInfo = 'userInfo'
+            const privateKey = 'ef75f981a22449c11633d7b5bd777bf290df125e172f84d4af84747801c00758', publicAddress = '0x48f06A6e2D876A2d41eCe3544069aA2d53D8847A', userInfo = 'userInfo'
             const email = 'cookepf@miamioh.edu', name = 'Peter', profileImage = 'profilePic'
 
 
@@ -91,12 +94,17 @@ class LoginScreen extends React.Component {
             
 
             /* =====  Wallet Info ==== */
-            //const provider = ethers.getDefaultProvider('kovan')
-            //const wallet = new ethers.Wallet(`0x${privateKey}`, provider)
+            const provider = ethers.getDefaultProvider('kovan', {
+                etherscan: '2M11INAC73PVBKQZPE1Q9F7U1PFGBAEPVH',
+                infura: '72bcb1f96fb84102bce553ec23c407d4',
+                alchemy: 'Z5XO8YjA452OZhw0Vgh30X0CINpD1tba'
+            });
+
+            const wallet = new ethers.Wallet(`0x${privateKey}`, provider)
             
 
             /* ===== Dummy Wallet Info ==== */
-            const wallet = 'wallet';
+            //const wallet = 'wallet';
             this.props.saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage);
             
 

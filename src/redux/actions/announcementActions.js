@@ -4,8 +4,10 @@ import {
     ANNOUNCEMENT_SUCCESS,
     ANNOUNCEMENT_TIMEOUT
 } from './constants';
-import "react-native-get-random-values"
-import "@ethersproject/shims"
+
+//import "react-native-get-random-values"
+//import "@ethersproject/shims"
+import "@ethersproject/shims/dist/index.js"
 import { ethers } from 'ethers'
 
 const Announcements = require('../../abi/Announcements.json')
@@ -40,12 +42,49 @@ function array_move(arr, old_index, new_index) {
 
 export const getAnnouncements = (wallet) => async (dispatch) => {
     dispatch(announcementsLoading());
-
+    
+    if (!wallet) {
+        dispatch(announcementsFailure());
+    }
     /* =====  Announcement getAnnouncements ==== */
-    //const announcementContract = new ethers.Contract('0x606232693ee7904044010Fe3D24e509d24b2696E', Announcements, wallet)
-    //const announcements = await announcementContract.getAnnouncements();
+    //console.log('FLAG 3:', announcementContract)
+    
+    //let tx = await announcementContract.getAnnouncements();
+    //console.log('FLAG 4:', tx)
+    
+    try {
+        console.log('FLAG 2 Wallet: ', wallet)
+        const announcementContract = new ethers.Contract('0x606232693ee7904044010Fe3D24e509d24b2696E', Announcements, wallet)
+        console.log('FLAG 3', announcementContract)
+        const announcements = await announcementContract.getAnnouncements();
+
+        //const receipt = await announcements.wait();
+        //console.log('FLAG 4:', JSON.stringify(announcements))
+
+        let formatted = [];
+
+        for (let index = 0; index < announcements[1].length; index++) {
+            var obj = {
+                title: announcements[1][index],
+                body: announcements[2][index],
+                timecode: announcements[3][index].toNumber()
+            }
+            formatted.push(obj);
+        }
+    
+        
+        //console.log("HEX:, ", parseInt(announcements[4]._hex, 16))
+        //array_move(formatted, parseInt(announcements[4]._hex, 16), 0)
+        console.log('annoucementActions getAnnoucements: ', formatted)
+    
+        dispatch(announcementsSuccess(formatted));
+    } catch(e) {
+        console.log("Error: ", e)
+    }
+    
 
     /* ===== Dummy Announcement getAnnouncements ==== */
+    /*
     const announcements = {
         "_nonce": "1",
         "_titles": [
@@ -62,21 +101,7 @@ export const getAnnouncements = (wallet) => async (dispatch) => {
         ],
         "_pinned": "1"
     }
+    */
 
-    const formatted = [];
-
-    for (index = 0; index < announcements._titles.length; index++) {
-        var obj = {
-            title: announcements._titles[index],
-            body: announcements._bodies[index],
-            timecode: announcements._timecodes[index]
-        }
-
-        formatted.push(obj);
-    }
-
-    array_move(formatted, announcements._pinned, 0)
-    console.log('annoucementActions getAnnoucements: ', formatted)
-
-    dispatch(announcementsSuccess(formatted));
+   
 }

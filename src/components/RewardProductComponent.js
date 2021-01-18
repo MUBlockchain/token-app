@@ -19,12 +19,18 @@ class RewardProductComponent extends React.Component {
 
     openReward = () => {
         //Might need to add a select reward to props
-        //this.props.selectReward(this.props.key, this.props.title, this.props.itemPic, this.props.price);
+        this.props.selectReward(this.props.itemIndex);
         console.log("OPEN REWARD:", this.props)
         this.props.navigation.navigate('RewardsOverview',{
             title: this.props.title,
-            price: this.props.price,
-            pic: this.props.pic
+            description: this.props.description,
+            imageUrl: this.props.imageUrl,
+            cost: this.props.cost,
+            infinite: this.props.infinite,
+            quantity: this.props.quantity,
+            active: this.props.active,
+            itemIndex: this.props.itemIndex,
+            isOwned: this.props.isOwned
         });
     }
 
@@ -49,19 +55,14 @@ class RewardProductComponent extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        selectedItem: state.itemReducer.selectedItem
-    }
-}
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        selectReward: (rewardId) => dispatch(selectReward(rewardId))
+        selectReward: (itemIndex) => dispatch(selectReward(itemIndex))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (RewardProductComponent);
+export default connect(null, mapDispatchToProps) (RewardProductComponent);
 
 const styles = StyleSheet.create({
     outerContainer: {

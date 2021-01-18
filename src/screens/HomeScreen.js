@@ -32,7 +32,9 @@ class HomeScreen extends React.Component {
     }
 
     async componentDidMount() {
-        await this.props.getAnnouncements(this.props.wallet);
+        // @dev TODO
+        //await this.props.getAnnouncements(this.props.wallet);
+        console.log('DONE COMPONENT DID MOUNT')
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -62,12 +64,13 @@ class HomeScreen extends React.Component {
     async _onRefresh () {
         console.log(this.props.isLoading)
         this.setState({refreshing: true})
-        await this.props.getAnnouncements(this.props.wallet);
+        //await this.props.getAnnouncements(this.props.wallet);
         this.setState({refreshing: false})
     }
 
 
     render() {
+        console.log('HomeScreen Render')
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
         // console.log("Announcements Error: " + this.props.error)
         
@@ -112,9 +115,7 @@ class HomeScreen extends React.Component {
                     </View>
                 </SafeAreaView>
             );
-
         }
-        
     }
 }
 
@@ -122,7 +123,6 @@ class HomeScreen extends React.Component {
 const mapStateToProps = (state) => {
     return {
         isLoading: state.announcementReducer.isLoading,
-        announcements: state.announcementReducer.announcements,
         errorBack: state.announcementReducer.errorBack,
         error: state.announcementReducer.error,
         timeoutOccurred: state.announcementReducer.timeoutOccurred,
