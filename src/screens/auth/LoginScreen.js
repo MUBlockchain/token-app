@@ -53,7 +53,8 @@ class LoginScreen extends React.Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         RNTorusDirectSdk.init({
             redirectUri: 'mubcapp://com.mubcapp/home',
-            browserRedirectUri: 'https://scripts.toruswallet.io/redirect.html',
+            // browserRedirectUri: 'https://scripts.toruswallet.io/redirect.html',
+            browserRedirectUri: 'https://torus.mubc.io/redirect.html',
             network: "testnet",  // details for test net
             proxyContractAddress: "0x4023d2a0D330bF11426B12C6144Cfb96B7fa6183"
         })
@@ -76,7 +77,7 @@ class LoginScreen extends React.Component {
                 verifier: 'mubc-google',
                 clientId: '1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com',
             });
-
+            console.log('USER INFO: ', loginDetails)
             /* ===== User Info ==== */
             const { privateKey, publicAddress, userInfo } = loginDetails
             const { email, name, profileImage } = userInfo

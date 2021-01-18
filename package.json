@@ -14,7 +14,7 @@
     "@react-native-community/google-signin": "^4.0.3",
     "@react-native-community/masked-view": "^0.1.6",
     "@react-native-firebase/app": "^6.7.1",
-    "@toruslabs/torus-direct-react-native-sdk": "^0.1.4",
+    "@toruslabs/torus-direct-react-native-sdk": "^0.1.5",
     "axios": "^0.19.2",
     "ethers": "^5.0.24",
     "react": "16.9.0",
