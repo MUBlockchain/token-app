@@ -5,6 +5,9 @@
  * @format
  * @flow
  */
+import "react-native-get-random-values"
+import "@ethersproject/shims"
+import { ethers } from 'ethers'
 
 import React from 'react';
 import { StyleSheet, Image, BackHandler, TouchableHighlight, Text } from 'react-native';
@@ -18,7 +21,6 @@ import Toast from 'react-native-root-toast';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import RNTorusDirectSdk from '@toruslabs/torus-direct-react-native-sdk';
 
-
 GoogleSignin.configure({
     // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
     webClientId: '1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
@@ -30,7 +32,6 @@ GoogleSignin.configure({
     // iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
 });
 
-// GoogleSignin.configure();
 class LoginScreen extends React.Component {
 
     static navigationOptions = {
@@ -72,6 +73,7 @@ class LoginScreen extends React.Component {
     signIn = async () => {
         try {
             this.setState({ refreshing: true });
+            /*
             const loginDetails = await RNTorusDirectSdk.triggerLogin({
                 typeOfLogin: 'google',
                 verifier: 'mubc-google',
@@ -79,56 +81,45 @@ class LoginScreen extends React.Component {
             });
             console.log('USER INFO: ', loginDetails)
             /* ===== User Info ==== */
-            const { privateKey, publicAddress, userInfo } = loginDetails
-            const { email, name, profileImage } = userInfo
-
-
-            //   const hasPlayServices = await GoogleSignin.hasPlayServices();
-
-            //   const userInfo = await GoogleSignin.signIn();
-            //   console.log("FLAG:" + JSON.stringify(userInfo));
-
-            //   const id_token = await GoogleSignin.getTokens();
-            //   console.log("After Get Token");
-            //   this.setState({ userInfo });
-            //   console.log(id_token.idToken);
-
-            //   const r = await QueryHandler.signIn(id_token.idToken);
-            //   console.log("After Query Handler");
-            //   var email = r.data.userid.email;
-            //   //console.log(email.substring(0, email.length - 12));
-            //   //console.log(r.data.userid.picture);
-            //   //console.log("Token: " + JSON.stringify(id_token));
-            //   this.setState({ profilePic : r.data.userid.picture});
-            //   this.setState({ token: id_token.idToken});
-
-            //   console.log("UserProfile");
-            //   await this.props.getUserProfile(email.substring(0, email.length - 12), id_token.idToken, r.data.userid.picture);
+            //const { privateKey, publicAddress, userInfo } = loginDetails
+            //const { email, name, profileImage } = userInfo
             
+
+            /* ===== Dummy User Info ==== */
+            const privateKey = 'ef75f981a22449c11633d7b5bd777bf290df125e172f84d4af84747801c00758', publicAddress = '0x48f06A6e2D876A2d41eCe3544069aA2d53D8847A', userInfo = 'userInfo'
+            const email = 'cookepf@miamioh.edu', name = 'Peter', profileImage = 'profilePic'
+
+
             // Save user information to app state
-            this.props.saveUserInformation(privateKey, publicAddress, email, name, profileImage);
+            console.log("Save User Info");
+            
+
+            /* =====  Wallet Info ==== */
+            const provider = ethers.getDefaultProvider('kovan', {
+                etherscan: '2M11INAC73PVBKQZPE1Q9F7U1PFGBAEPVH',
+                infura: '72bcb1f96fb84102bce553ec23c407d4',
+                alchemy: 'Z5XO8YjA452OZhw0Vgh30X0CINpD1tba'
+            });
+
+            const wallet = new ethers.Wallet(`0x${privateKey}`, provider)
+            
+
+            /* ===== Dummy Wallet Info ==== */
+            //const wallet = 'wallet';
+            this.props.saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage);
+            
 
             // Create ethers contract instance
-            this.props.createContract(privateKey);
+            //console.log("Creating Contract...");
+            //await this.props.createContract(privateKey);
+            //console.log("Contract Created");
+
             this.setState({ refreshing: false });
             console.log("Navigate");
             this.props.navigation.navigate('Drawer');
 
         } catch (error) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                // user cancelled the login flow
-                console.log("user cancelled the login flow");
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                // operation (f.e. sign in) is in progress already
-                console.log("operation (f.e. sign in) is in progress already");
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                // play services not available or outdated
-                console.log("play services not available or outdated");
-            } else {
-                // some other error happened
-                console.log("some other error happened");
-                console.log("ERROR: " + JSON.stringify(error));
-            }
+            console.log("ERROR: " + JSON.stringify(error));
         }
     };
 

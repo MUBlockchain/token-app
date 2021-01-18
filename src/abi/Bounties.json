@@ -1,0 +1,377 @@
+[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_users",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			}
+		],
+		"name": "BountyAdded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_by",
+				"type": "address"
+			}
+		],
+		"name": "BountyApplication",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_minted",
+				"type": "uint256"
+			}
+		],
+		"name": "BountyAwarded",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			}
+		],
+		"name": "BountyDelisted",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			}
+		],
+		"name": "BountyRejected",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_title",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_imageUrl",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_award",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "_infinite",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "_manual",
+				"type": "bool"
+			},
+			{
+				"internalType": "string",
+				"name": "_tweetId",
+				"type": "string"
+			}
+		],
+		"name": "addBounty",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			}
+		],
+		"name": "applyForBounty",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_trigger",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			}
+		],
+		"name": "approveBountyRequest",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "bounties",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "imageUrl",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "award",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "infinite",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "active",
+				"type": "bool"
+			},
+			{
+				"internalType": "enum Trigger",
+				"name": "trigger",
+				"type": "uint8"
+			},
+			{
+				"internalType": "string",
+				"name": "tweet",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "pendingNonce",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "bountyNonce",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			}
+		],
+		"name": "delistBounty",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getBounties",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_bountyNonce",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_titles",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_descriptions",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_imageUrls",
+				"type": "string[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_awards",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "bool[]",
+				"name": "_infinites",
+				"type": "bool[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_quantities",
+				"type": "uint256[]"
+			},
+			{
+				"internalType": "bool[]",
+				"name": "_actives",
+				"type": "bool[]"
+			},
+			{
+				"internalType": "bool[]",
+				"name": "_manuals",
+				"type": "bool[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_trigger",
+				"type": "uint256"
+			}
+		],
+		"name": "pendingBountyRequests",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address[]",
+				"name": "_users",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_bounties",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_trigger",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_nonce",
+				"type": "uint256"
+			}
+		],
+		"name": "rejectBountyRequest",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]

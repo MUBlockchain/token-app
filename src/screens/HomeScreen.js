@@ -32,8 +32,9 @@ class HomeScreen extends React.Component {
     }
 
     async componentDidMount() {
-        //await this.props.getAnnouncements(this.props.token);
-        console.log('PROPS: ', props)
+        // @dev TODO
+        //await this.props.getAnnouncements(this.props.wallet);
+        console.log('DONE COMPONENT DID MOUNT')
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -47,14 +48,14 @@ class HomeScreen extends React.Component {
     }
 
     renderAnnouncementsComponent = () => {
-        console.log("renderAnnouncementsComponent...")
-        this.props.announcements.reverse();
+        console.log("renderAnnouncementsComponent...:", this.props.annoucements)
+        //this.props.annoucementContract.reverse();
         return this.props.announcements.map((announcement, i) => {
             return <GroupAnnouncementComponent
                 key={i}
-                author={announcement.author}
+                //author={announcement.author}
                 //date={annoucement.onCreated}
-                message={announcement.announcement}
+                message={announcement.body}
                 title={announcement.title}
             />
         });
@@ -63,12 +64,13 @@ class HomeScreen extends React.Component {
     async _onRefresh () {
         console.log(this.props.isLoading)
         this.setState({refreshing: true})
-        await this.props.getAnnouncements(this.props.token);
+        //await this.props.getAnnouncements(this.props.wallet);
         this.setState({refreshing: false})
     }
 
 
     render() {
+        console.log('HomeScreen Render')
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
         // console.log("Announcements Error: " + this.props.error)
         
@@ -113,32 +115,29 @@ class HomeScreen extends React.Component {
                     </View>
                 </SafeAreaView>
             );
-
         }
     }
 }
 
 
 const mapStateToProps = (state) => {
-    console.log(state);
     return {
         isLoading: state.announcementReducer.isLoading,
-        announcements: state.announcementReducer.announcements,
         errorBack: state.announcementReducer.errorBack,
         error: state.announcementReducer.error,
         timeoutOccurred: state.announcementReducer.timeoutOccurred,
         token: state.userReducer.token,
         privateKey: state.userReducer.privateKey,
-        contract: state.contractReducer.contract
+        wallet: state.userReducer.wallet,
+        announcements: state.announcementReducer.announcements
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getAnnouncements: (token) => dispatch(getAnnouncements(token))
+        getAnnouncements: (wallet) => dispatch(getAnnouncements(wallet))
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(HomeScreen));
 

@@ -35,6 +35,7 @@ target 'MubcApp' do
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
   pod 'RNTorusDirectSdk', :path => '../node_modules/@toruslabs/torus-direct-react-native-sdk'
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
   target 'MubcAppTests' do
     inherit! :search_paths

@@ -93,7 +93,7 @@ class QueryHandler {
      * Get Annoucements
      */
     static getAnnouncements(token) {
-        console.log("Get Announcements Toke: " + token)
+        //console.log("Get Announcements Toke: " + token)
         var instance = axios.create({
             baseURL: 'http://mubc.io:8080/api/',
             timeout: 1000,
