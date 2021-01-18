@@ -102,3 +102,7 @@ export const getUserProfile = (uuid, token, profilePic) => async (dispatch) => {
         dispatch(userTimeout());
     }
 }
+
+export const doesUserExist = publicAddress => async dispatch => {
+
+}

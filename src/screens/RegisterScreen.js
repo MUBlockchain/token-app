@@ -1,28 +1,22 @@
 import React from 'react';
 import { BackHandler } from 'react-native';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { SafeAreaView, withNavigation } from 'react-navigation';
+import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 
-class RedeemScreen extends React.Component {
+class RegisterScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         const { params = {} } = navigation.state;
         return {
-            title: "Redeem Code",
-            headerLeft: () =>
-                <View style={{ marginLeft: 10 }}>
-                    <Icon
-                        name="menu"
-                        onPress={() => navigation.toggleDrawer()}
-                        color="#000000"
-                    />
-                </View>,
+            headerTitleStyle: { alignSelf: 'center' },
+            title: "Register",
         };
     };
     constructor(props) {
         super(props);
         this.state = {
-            code:"",
+            twitterid:"",
         };
     }
 
@@ -39,31 +33,46 @@ class RedeemScreen extends React.Component {
         return true;
     }
 
+    register = async () => {
+
+    }
+
 
     render() {
         return (
             <SafeAreaView style={styles.viewStyles}>
+                <Text>Name: </Text>
                 <TextInput
                     style={{ height: 40 }}
-                    placeholder="Enter Code"
                     onChangeText={(value) => this.setState({ code: value })}
-                    value={this.state.code}
+                    editable={false}
+                    value={this.props.name}
                 />
-
-                <Button
-                    onPress={this.getBalance}
-                    title="Redeem Code"
+                <TextInput
+                    style={styles.tw}
+                    onChangeText={(value) => this.setState({ code: value })}
+                    placeholder="Twitter Handle"
+                    value={this.state.twitter}
                 />
             </SafeAreaView>
         );
     }
 }
 
-export default RedeemScreen;
+const mapStateToProps = (state) => {
+    return {
+        name: state.userReducer.name,
+    }
+}
 
+export default connect(mapStateToProps)(withNavigation(RegisterScreen));
 
 
 const styles = StyleSheet.create({
+    twitterHandle: {
+        height: 40,
+        width: 100,
+    },
     logo: {
         width: 250,
         height: 250
@@ -71,7 +80,7 @@ const styles = StyleSheet.create({
     viewStyles: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        paddingTop: 100,
         backgroundColor: 'white'
     },
     textStyles: {

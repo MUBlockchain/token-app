@@ -53,9 +53,7 @@ class LoginScreen extends React.Component {
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         RNTorusDirectSdk.init({
-            redirectUri: 'mubcapp://com.mubcapp/home',
-            // browserRedirectUri: 'https://scripts.toruswallet.io/redirect.html',
-            browserRedirectUri: 'https://torus.mubc.io/redirect.html',
+            browserRedirectUri: 'https://app.mubc.io/redirect.html',
             network: "testnet",  // details for test net
             proxyContractAddress: "0x4023d2a0D330bF11426B12C6144Cfb96B7fa6183"
         })
@@ -73,26 +71,30 @@ class LoginScreen extends React.Component {
     signIn = async () => {
         try {
             this.setState({ refreshing: true });
-            /*
             const loginDetails = await RNTorusDirectSdk.triggerLogin({
                 typeOfLogin: 'google',
                 verifier: 'mubc-google',
                 clientId: '1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com',
             });
-            console.log('USER INFO: ', loginDetails)
             /* ===== User Info ==== */
-            //const { privateKey, publicAddress, userInfo } = loginDetails
-            //const { email, name, profileImage } = userInfo
+            const { privateKey, publicAddress, userInfo } = loginDetails
+            const { email, name, profileImage } = userInfo
+
+            console.log('PRIVATE KEY: ', privateKey)
+            console.log('PUBLIC ADDRESS: ', publicAddress)
+            console.log('EMAIL: ', email)
+            console.log('NAME: ', name)
+            console.log('PROFILE IMAGE: ', profileImage)
             
 
             /* ===== Dummy User Info ==== */
-            const privateKey = 'ef75f981a22449c11633d7b5bd777bf290df125e172f84d4af84747801c00758', publicAddress = '0x48f06A6e2D876A2d41eCe3544069aA2d53D8847A', userInfo = 'userInfo'
-            const email = 'cookepf@miamioh.edu', name = 'Peter', profileImage = 'profilePic'
+            // const privateKey = 'ef75f981a22449c11633d7b5bd777bf290df125e172f84d4af84747801c00758', publicAddress = '0x48f06A6e2D876A2d41eCe3544069aA2d53D8847A', userInfo = 'userInfo'
+            // const email = 'cookepf@miamioh.edu', name = 'Peter', profileImage = 'profilePic'
 
 
             // Save user information to app state
             console.log("Save User Info");
-            
+            this.props.saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage);
 
             /* =====  Wallet Info ==== */
             const provider = ethers.getDefaultProvider('kovan', {
@@ -101,22 +103,30 @@ class LoginScreen extends React.Component {
                 alchemy: 'Z5XO8YjA452OZhw0Vgh30X0CINpD1tba'
             });
 
-            const wallet = new ethers.Wallet(`0x${privateKey}`, provider)
+            const wallet = new ethers.Wallet(`0x${privateKey}`, provider);
             
 
             /* ===== Dummy Wallet Info ==== */
-            //const wallet = 'wallet';
-            this.props.saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage);
             
 
             // Create ethers contract instance
-            //console.log("Creating Contract...");
-            //await this.props.createContract(privateKey);
-            //console.log("Contract Created");
+            console.log("Creating Contract...");
+            await this.props.createContract(wallet);
+            console.log("Contract Created");
 
             this.setState({ refreshing: false });
+            // let exists = await this.props.userContract.role(publicAddress)
+            // exists = exists.toNumber()
             console.log("Navigate");
-            this.props.navigation.navigate('Drawer');
+            this.props.navigation.navigate('RegisterUser')
+            // if(exists) {
+            //     console.log('User Exists')
+            //     //  this.props.navigation.navigate('Drawer');
+            // } else {
+            //     console.log('User Does Not Exist')
+            //     this.props.navigation.navigate('Register')
+            // }
+           
 
         } catch (error) {
             console.log("ERROR: " + JSON.stringify(error));
@@ -192,7 +202,8 @@ const mapStateToProps = (state) => {
         balance: state.userReducer.balance,
         purchases: state.userReducer.purchases,
         profilePic: state.userReducer.profilePic,
-        token: state.userReducer.token
+        token: state.userReducer.token,
+        userContract: state.contractReducer.userContract
     }
 }
 

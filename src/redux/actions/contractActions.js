@@ -25,7 +25,7 @@ const contractFailure = () => ({
     type: CONTRACT_FAILURE
 })
 
-export const createContract = privateKey => async dispatch => {
+export const createContract = wallet => async dispatch => {
     dispatch(contractLoading())
 
     try {
@@ -54,9 +54,7 @@ export const createContract = privateKey => async dispatch => {
         console.log('FLAG 5')
         */
 
-        const userContract = {
-
-        }
+       const userContract = new ethers.Contract('0xD2d045e42603182f236f0c7cfD33bb7D743E2dcc', Users, wallet)
 
         
 
@@ -65,10 +63,10 @@ export const createContract = privateKey => async dispatch => {
         }
 
         dispatch(contractSuccess(
-            userContract,
-            announcementContract,
-            itemContract,
-            bountyContract
+            userContract, null, null, null
+            // announcementContract,
+            // itemContract,
+            // bountyContract
         ))
     } catch (error) {
         console.log(error)
