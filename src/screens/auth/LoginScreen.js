@@ -5,7 +5,7 @@
  * @format
  * @flow
  */
-import "react-native-get-random-values"
+
 import "@ethersproject/shims"
 import { ethers } from 'ethers'
 
@@ -121,14 +121,6 @@ class LoginScreen extends React.Component {
             console.log("ERROR: " + JSON.stringify(error));
         }
     };
-
-    loginHandler = async () => {
-        //Store uuid in store
-        this.setState({ refreshing: true });
-        await this.props.getUserProfile(this.state.uuid);
-        this.setState({ refreshing: false });
-        this.props.navigation.navigate('Drawer');
-    }
 
     registerHandler = async () => {
         //Store uuid in store

@@ -83,22 +83,3 @@ export const createUserContract = wallet => async dispatch => {
         console.log(e)
     }
 }
-
-export const getUserProfile = (uuid, token, profilePic) => async (dispatch) => {
-    dispatch(userLoading());
-
-    //Do api call
-    var res = await QueryHandler.getUserProfile(uuid, token);
-    console.log("User Profile: " + JSON.stringify(res.data));
-
-    if (!res) {
-        console.log("UserFailure...");
-        dispatch(userFailure(res.status));
-    } else if (res['status'] === 200) {
-        console.log("UserSuccess... Token: "+ profilePic);
-        dispatch(userSuccess(res.data, token, profilePic));
-    } else {
-        console.log("UserTimeout...");
-        dispatch(userTimeout());
-    }
-}

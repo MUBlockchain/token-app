@@ -83,7 +83,7 @@ const DrawerNavigator = createDrawerNavigator({
         navigationOptions: {
             drawerIcon: ({tintColor}) => 
                 <Icon 
-                    name="gem" 
+                    name="map" 
                     color={tintColor} 
                     type="font-awesome" 
                     size={24} 

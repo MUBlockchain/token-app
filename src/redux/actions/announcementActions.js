@@ -5,10 +5,11 @@ import {
     ANNOUNCEMENT_TIMEOUT
 } from './constants';
 
-//import "react-native-get-random-values"
-//import "@ethersproject/shims"
-import "@ethersproject/shims/dist/index.js"
-import { ethers } from 'ethers'
+// Pull in the shims (BEFORE importing ethers)
+import "@ethersproject/shims"
+
+// Import the ethers library
+import { ethers } from "ethers";
 
 const Announcements = require('../../abi/Announcements.json')
 
@@ -46,16 +47,12 @@ export const getAnnouncements = (wallet) => async (dispatch) => {
     if (!wallet) {
         dispatch(announcementsFailure());
     }
-    /* =====  Announcement getAnnouncements ==== */
-    //console.log('FLAG 3:', announcementContract)
-    
-    //let tx = await announcementContract.getAnnouncements();
-    //console.log('FLAG 4:', tx)
     
     try {
-        console.log('FLAG 2 Wallet: ', wallet)
+        //console.log('FLAG 2 Wallet: ', wallet)
         const announcementContract = new ethers.Contract('0x606232693ee7904044010Fe3D24e509d24b2696E', Announcements, wallet)
-        console.log('FLAG 3', announcementContract)
+        
+        //console.log('FLAG 3', announcementContract)
         const announcements = await announcementContract.getAnnouncements();
 
         //const receipt = await announcements.wait();
