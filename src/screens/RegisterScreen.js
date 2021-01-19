@@ -9,6 +9,7 @@ class RegisterScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
         const { params = {} } = navigation.state;
         return {
+            headerTitleStyle: { alignSelf: 'center' },
             title: 'Register'
         };
     };
@@ -33,9 +34,8 @@ class RegisterScreen extends React.Component {
     }
 
     register = async () => {
-        console.log(this.state.twitterName)
-        let ret = await QueryHandler.getTwitterId(this.state.twitterName)
-        console.log('RET: ', ret)
+        const ret = await QueryHandler.getTwitterId(this.state.twitterName.substring(1))
+        const twitterid = ret.data
         // await this.props.userContract.enroll(this.props.name, twitterid, this.props.image)
         // this.props.navigation.navigate('RegisterUser')
     }
