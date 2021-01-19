@@ -37,7 +37,7 @@ class RegisterScreen extends React.Component {
         const ret = await QueryHandler.getTwitterId(this.state.twitterName.substring(1))
         const twitterid = ret.data
         // await this.props.userContract.enroll(this.props.name, twitterid, this.props.image)
-        // this.props.navigation.navigate('RegisterUser')
+        // this.props.navigation.navigate('Drawer')
     }
 
 
