@@ -159,6 +159,19 @@ class QueryHandler {
             });
     }
 
+    static getTwitterId(twitterName) {
+        console.log('In Handler')
+
+        return axios.get(`https://api.twitter.com/2/users/by/username/${twitterName}`, {
+            headers: {
+                'Authorization': 'Bearer AAAAAAAAAAAAAAAAAAAAALKgKQEAAAAAawe6evIzoxU2am7XqK%2BHarbL74w%3D5fljVexGiHEI0KyrbPFdSWRXzInON4hLNQ9ecGzxqXSK52plxt'
+            }
+        }) 
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
 
 }
 
