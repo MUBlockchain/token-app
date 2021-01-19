@@ -17,6 +17,10 @@ class RegisterScreen extends React.Component {
         super(props);
         this.state = {
             twitterName: "",
+            loading: false,
+            invalid: false,
+            error: false,
+            errorMessage: ""
         };
     }
 
@@ -34,10 +38,30 @@ class RegisterScreen extends React.Component {
     }
 
     register = async () => {
-        const ret = await QueryHandler.getTwitterId(this.state.twitterName.substring(1))
-        const twitterid = ret.data
+        this.setState({loading: true})
+        this.setState({error: false})
+        try {
+        if(this.state.twitterName.indexOf('@') === -1) {
+            this.setState({invalid: true})
+            this.setState({loading: false})
+        } else {
+            this.setState({invalid: false})
+            const ret = await QueryHandler.getTwitterId(this.state.twitterName.substring(1))
+            const twitterid = ret.data
         // await this.props.userContract.enroll(this.props.name, twitterid, this.props.image)
         // this.props.navigation.navigate('Drawer')
+        } 
+        }
+        catch (err) {
+            if(err instanceof TypeError) {
+                this.setState({errorMessage: '*User does not exist. Enter valid username.'})
+            } else {
+                this.setState({errorMessage: '*Some other error occurred. Try again later'})
+            }
+            this.setState({error: true})
+        } finally {
+            this.setState({loading: false})
+        }
     }
 
 
@@ -61,18 +85,20 @@ class RegisterScreen extends React.Component {
                         value={this.state.twitter}
                     />
                 </View>
+                {this.state.invalid && <Text style={styles.error}>*Input must contain "@"</Text> }
+                {this.state.error && <Text style={styles.error}>{this.state.errorMessage}</Text> }
                 <View style={styles.inputRow}>
                     <Text>Image URL: </Text>
                     <TextInput
                         editable={false}
-                        value={`${this.props.image.substring(0, 16)}...`}
+                        value={`${this.props.image.substring(0, 24)}...`}
                     />
                 </View>
                 <TouchableHighlight
                     style={styles.registerButton}
                     onPress={this.register}
                     underlayColor='#fff'>
-                    <Text style={[24, styles.signInText]}>Register</Text>
+                    <Text style={[28, styles.signInText]}>{!this.state.loading ? 'Register' : '...'}</Text>
                 </TouchableHighlight>
             </SafeAreaView>
         );
@@ -94,11 +120,12 @@ const styles = StyleSheet.create({
     inputRow: {
         flexDirection: "row",
         alignItems: 'center',
-        justifyContent: 'space-evenly'
+        justifyContent: 'space-evenly',
+        marginBottom: 25
     },
     twitterHandle: {
         height: 30,
-        width: 110,
+        width: 130,
         backgroundColor: 'lightgray',
         borderRadius: 999,
         padding: 8
@@ -123,7 +150,11 @@ const styles = StyleSheet.create({
     signInText: {
         color: '#fff',
         textAlign: 'center',
-        fontSize: 16
+        fontSize: 18
+    },
+    error: {
+        color: 'red',
+        fontSize: 12
     },
     logo: {
         width: 250,

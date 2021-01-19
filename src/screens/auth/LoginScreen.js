@@ -119,6 +119,9 @@ class LoginScreen extends React.Component {
             // exists = exists.toNumber()
             console.log("Navigate");
             this.props.navigation.navigate('RegisterUser')
+
+            // Logic for navigation
+
             // if(exists) {
             //     console.log('User Exists')
             //     //  this.props.navigation.navigate('Drawer');
