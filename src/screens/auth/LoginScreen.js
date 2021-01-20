@@ -15,7 +15,7 @@ import { connect } from 'react-redux';
 import { saveUserInformation } from '../../redux/actions/userActions';
 import { createContract } from '../../redux/actions/contractActions'
 import RNTorusDirectSdk from '@toruslabs/torus-direct-react-native-sdk';
-import { ETHERSCAN, INFURA, ALCHEMY } from '@env'
+import { ETHERSCAN, INFURA, ALCHEMY, CLIENT_ID, VERIFIER, BROWSER_REDIRECT } from '@env'
 
 class LoginScreen extends React.Component {
 
@@ -38,7 +38,7 @@ class LoginScreen extends React.Component {
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         RNTorusDirectSdk.init({
-            browserRedirectUri: 'https://app.mubc.io/redirect.html',
+            browserRedirectUri: BROWSER_REDIRECT,
             network: "testnet",  // details for test net
             proxyContractAddress: "0x4023d2a0D330bF11426B12C6144Cfb96B7fa6183"
         })
@@ -55,15 +55,14 @@ class LoginScreen extends React.Component {
 
     signIn = async () => {
         try {
-            this.setState({ refreshing: true });
-            /*
+            // this.setState({ refreshing: true });
+            
             const loginDetails = await RNTorusDirectSdk.triggerLogin({
                 typeOfLogin: 'google',
-                verifier: 'mubc-google',
-                clientId: '1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com',
+                verifier: VERIFIER,
+                clientId: CLIENT_ID,
             });
             /* ===== User Info ==== */
-            /*
             const { privateKey, publicAddress, userInfo } = loginDetails
             const { email, name, profileImage } = userInfo
 
@@ -72,28 +71,27 @@ class LoginScreen extends React.Component {
             console.log('EMAIL: ', email)
             console.log('NAME: ', name)
             console.log('PROFILE IMAGE: ', profileImage)
-            */
 
             /* ===== Dummy User Info ==== */
-            const privateKey = 'ef75f981a22449c11633d7b5bd777bf290df125e172f84d4af84747801c00758', publicAddress = '0x48f06A6e2D876A2d41eCe3544069aA2d53D8847A', userInfo = 'userInfo'
-            const email = 'cookepf@miamioh.edu', name = 'Peter', profileImage = 'profilePic'
+            // const privateKey = 'ef75f981a22449c11633d7b5bd777bf290df125e172f84d4af84747801c00758', publicAddress = '0x48f06A6e2D876A2d41eCe3544069aA2d53D8847A', userInfo = 'userInfo'
+            // const email = 'cookepf@miamioh.edu', name = 'Peter', profileImage = 'profilePic'
 
 
             /* =====  Wallet Info ==== */
-            const provider = ethers.getDefaultProvider('kovan', {
-                etherscan: ETHERSCAN,
-                infura: INFURA,
-                alchemy: ALCHEMY
-            });
+            // const provider = ethers.getDefaultProvider('kovan', {
+            //     etherscan: ETHERSCAN,
+            //     infura: INFURA,
+            //     alchemy: ALCHEMY
+            // });
 
-            const wallet = new ethers.Wallet(`0x${privateKey}`, provider);
+            // const wallet = new ethers.Wallet(`0x${privateKey}`, provider);
 
-            this.props.saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage);
+            // this.props.saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage);
 
-            this.setState({ refreshing: false });
+            // this.setState({ refreshing: false });
             // let exists = await this.props.userContract.role(publicAddress)
             // exists = exists.toNumber()
-            console.log("Navigate");
+            // console.log("Navigate");
             
             //this.props.navigation.navigate('RegisterUser')
 
@@ -106,7 +104,7 @@ class LoginScreen extends React.Component {
             //     this.props.navigation.navigate('Register')
             // }
            
-            this.props.navigation.navigate('Drawer');
+            // this.props.navigation.navigate('Drawer');
 
         } catch (error) {
             console.log("ERROR: " + JSON.stringify(error));
