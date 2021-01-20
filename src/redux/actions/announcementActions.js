@@ -50,7 +50,7 @@ export const getAnnouncements = (wallet) => async (dispatch) => {
     
     try {
         //console.log('FLAG 2 Wallet: ', wallet)
-        const announcementContract = new ethers.Contract('0x606232693ee7904044010Fe3D24e509d24b2696E', Announcements, wallet)
+        const announcementContract = new ethers.Contract(Announcements.networks[42].address, Announcements.abi, wallet)
         
         //console.log('FLAG 3', announcementContract)
         const announcements = await announcementContract.getAnnouncements();

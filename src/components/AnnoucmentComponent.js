@@ -51,10 +51,6 @@ const styles = StyleSheet.create({
         padding: 10,
         flex: 0
     },
-    rowFlex: {
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between'
@@ -62,19 +58,9 @@ const styles = StyleSheet.create({
     rowLimitHeight: {
         height: 40
     },
-    rowMarginTop: {
-        marginTop: 17
-    },
-    rowMarginTopLight: {
-        marginTop: 10
-    },
     subRowStart: {
         flexDirection: 'row',
         justifyContent: 'flex-start'
-    },
-    subRowEnd: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
     },
     textEmphasis: {
         fontSize: 20,
@@ -98,15 +84,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: "100%"
     },
-    date: {
-        height: "100%",
-        marginRight: 10,
-        flexDirection: 'column',
-        justifyContent: 'center'
-    },
-    dateText: {
-        fontSize: 14
-    },
     content: {
         marginTop: 10,
         marginHorizontal: 10,
@@ -114,35 +91,5 @@ const styles = StyleSheet.create({
     contentText: {
         fontSize: 14,
         color: 'black'
-    },
-    likesInfoContainer: {
-        marginLeft: 10,
-        alignItems: "center"
-    },
-    likesInfoTextContainer: {
-        marginLeft: 3
-    },
-    dislikeInfoIconContainerStyle: {
-        marginLeft: 10
-    },
-    commentsInfo: {
-        marginRight: 10,
-    },
-    hairline: {
-        marginTop: 10,
-        marginHorizontal: 10,
-        backgroundColor: '#bbb',
-        height: 1
-    },
-    actionContainer: {
-        marginLeft: 5
-    },
-    actionText: {
-        fontSize: 16,
-        fontWeight: '400'
-    },
-    condense: {
-        marginHorizontal: 20,
-        marginBottom: 5
     }
 });

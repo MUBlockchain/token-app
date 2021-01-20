@@ -8,29 +8,14 @@
 
 import "@ethersproject/shims"
 import { ethers } from 'ethers'
-
 import React from 'react';
 import { StyleSheet, Image, BackHandler, TouchableHighlight, Text } from 'react-native';
 import { SafeAreaView, withNavigation } from 'react-navigation';
-import { Input, Button, Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { saveUserInformation } from '../../redux/actions/userActions';
 import { createContract } from '../../redux/actions/contractActions'
-import QueryHandler from '../../api/QueryHandler';
-import Toast from 'react-native-root-toast';
-import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import RNTorusDirectSdk from '@toruslabs/torus-direct-react-native-sdk';
-
-GoogleSignin.configure({
-    // scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
-    webClientId: '1062557508086-44j40vu7g0dg34pi32ae6kq3arjm6o1j.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-    offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-    // hostedDomain: '', // specifies a hosted domain restriction
-    // loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
-    // forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-    // accountName: '', // [Android] specifies an account name on the device that should be used
-    // iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-});
+import { ETHERSCAN, INFURA, ALCHEMY } from '@env'
 
 class LoginScreen extends React.Component {
 
@@ -95,13 +80,12 @@ class LoginScreen extends React.Component {
 
             /* =====  Wallet Info ==== */
             const provider = ethers.getDefaultProvider('kovan', {
-                etherscan: '2M11INAC73PVBKQZPE1Q9F7U1PFGBAEPVH',
-                infura: '72bcb1f96fb84102bce553ec23c407d4',
-                alchemy: 'Z5XO8YjA452OZhw0Vgh30X0CINpD1tba'
+                etherscan: ETHERSCAN,
+                infura: INFURA,
+                alchemy: ALCHEMY
             });
 
             const wallet = new ethers.Wallet(`0x${privateKey}`, provider)
-            
 
             /* ===== Dummy Wallet Info ==== */
             //const wallet = 'wallet';
@@ -121,39 +105,6 @@ class LoginScreen extends React.Component {
             console.log("ERROR: " + JSON.stringify(error));
         }
     };
-
-    registerHandler = async () => {
-        //Store uuid in store
-        this.setState({ refreshing: true });
-        console.log("Registering User...");
-
-        let toast = Toast.show('Register User...', {
-            duration: Toast.durations.LONG,
-            position: Toast.positions.BOTTOM,
-            shadow: true,
-            animation: true,
-            hideOnPress: true,
-            delay: 0
-        });
-
-        var res = await QueryHandler.registerUser(this.state.registerUuid, this.state.name);
-        if (res) {
-            let toast = Toast.show('Logging in User...', {
-                duration: Toast.durations.LONG,
-                position: Toast.positions.BOTTOM,
-                shadow: true,
-                animation: true,
-                hideOnPress: true,
-                delay: 0
-            });
-            await this.props.getUserProfile(this.state.registerUuid);
-            this.setState({ refreshing: false });
-            this.props.navigation.navigate('Drawer');
-        } else {
-
-        }
-
-    }
 
     render() {
         return (
@@ -189,7 +140,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getUserProfile: (uuid, token, profilePic) => dispatch(getUserProfile(uuid, token, profilePic)),
         saveUserInformation: (privateKey, publicAddress, wallet, email, name, profileImage) => dispatch(saveUserInformation(privateKey, publicAddress, wallet, email, name, profileImage)),
         createContract: privateKey => dispatch(createContract(privateKey))
     }
@@ -208,11 +158,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#FFFFFF'
-    },
-    textStyles: {
-        color: 'white',
-        fontSize: 40,
-        fontWeight: 'bold'
     },
     signIn: {
         marginRight: 40,

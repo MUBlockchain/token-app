@@ -4,9 +4,8 @@ import {
     USER_FAILURE, 
     USER_TIMEOUT
 } from './constants';
-import QueryHandler from '../../api/QueryHandler';
-import {ethers as Ethers } from 'ethers'
-import configureStore from '../index'
+import "@ethersproject/shims/dist/index.js"
+import { ethers } from 'ethers'
 
 const Announcements = require('../../abi/Announcements.json');
 
@@ -40,7 +39,7 @@ export const saveUserInformation = (privateKey, publicAddress, wallet, email, na
     
     try {
          /* =====  User getUser ==== */
-        //const userContract = new ethers.Contract('0xD2d045e42603182f236f0c7cfD33bb7D743E2dcc', Users, wallet)
+        //const userContract = new ethers.Contract(Users.networks[42].address, Users.abi, wallet)
         //const user = await userContract.getUser(publicAddress);
 
         /* ===== Dummy User getUser Response ==== */

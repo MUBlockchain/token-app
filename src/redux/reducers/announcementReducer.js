@@ -1,5 +1,3 @@
-
-import { act } from 'react-test-renderer';
 import { ANNOUNCEMENT_FAILURE, ANNOUNCEMENT_TIMEOUT, ANNOUNCEMENT_SUCCESS, ANNOUNCEMENT_LOADING } from '../actions/constants';
 
 const initAnnouncementState = {
