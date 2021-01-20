@@ -36,7 +36,7 @@ export const getBounties = (wallet, purchased) => async (dispatch) => {
 
     try {
         /* =====  Bounty getBounty ==== */
-        //const bountyContract = new ethers.Contract('0x54D663193FEf614F7B5d1F9288c3Dd2F5aE23461', Bounties, wallet)
+        //const bountyContract = new ethers.Contract(Bounties.networks[42].address, Bounties.abi, wallet)
         //const bounties = await bountyContract.getItems();
 
         /* ===== Dummy Bounty getBounty Response ==== */

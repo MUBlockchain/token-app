@@ -1,6 +1,5 @@
 import { CONTRACT_LOADING, CONTRACT_SUCCESS, CONTRACT_FAILURE } from './constants'
 
-import "react-native-get-random-values"
 import "@ethersproject/shims"
 import { ethers } from 'ethers'
 

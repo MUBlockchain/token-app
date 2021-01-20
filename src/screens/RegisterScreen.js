@@ -41,7 +41,7 @@ class RegisterScreen extends React.Component {
         this.setState({loading: true})
         this.setState({error: false})
         try {
-        if(this.state.twitterName.indexOf('@') === -1) {
+        if (this.state.twitterName.indexOf('@') === -1) {
             this.setState({invalid: true})
             this.setState({loading: false})
         } else {

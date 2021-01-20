@@ -8,7 +8,6 @@
 
 import React from 'react';
 import { BackHandler } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { StyleSheet, Image } from 'react-native';
 import {  SafeAreaView } from 'react-navigation';
 

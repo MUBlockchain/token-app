@@ -7,9 +7,6 @@ import {
     ITEMS_PURCHASING,
     ITEMS_PURCHASED
 } from './constants';
-//import "react-native-get-random-values"
-//import "@ethersproject/shims"
-
 import "@ethersproject/shims/dist/index.js"
 import { ethers } from 'ethers'
 
@@ -69,7 +66,7 @@ export const getItems = (wallet, purchased) => async (dispatch) => {
     try {
         /* =====  Item getItems ==== */
         console.log('FLAG 2 Wallet: ', wallet)
-        const itemContract = new ethers.Contract('0xDc8e83240f8271769119B56A85B0e788a43A3a25', Items, wallet)
+        const itemContract = new ethers.Contract(Items.networks[42].address, Items.abi, wallet)
         console.log('FLAG 3', itemContract)
         const items = await itemContract.getItems();
         console.log('FLAG 4:', JSON.stringify(items))

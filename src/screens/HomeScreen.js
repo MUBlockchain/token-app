@@ -32,9 +32,7 @@ class HomeScreen extends React.Component {
     }
 
     async componentDidMount() {
-        // @dev TODO
-        //await this.props.getAnnouncements(this.props.wallet);
-        console.log('DONE COMPONENT DID MOUNT')
+        await this.props.getAnnouncements(this.props.wallet);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -48,13 +46,10 @@ class HomeScreen extends React.Component {
     }
 
     renderAnnouncementsComponent = () => {
-        console.log("renderAnnouncementsComponent...:", this.props.annoucements)
         //this.props.annoucementContract.reverse();
         return this.props.announcements.map((announcement, i) => {
             return <GroupAnnouncementComponent
                 key={i}
-                //author={announcement.author}
-                //date={annoucement.onCreated}
                 message={announcement.body}
                 title={announcement.title}
             />
@@ -64,7 +59,7 @@ class HomeScreen extends React.Component {
     async _onRefresh () {
         console.log(this.props.isLoading)
         this.setState({refreshing: true})
-        //await this.props.getAnnouncements(this.props.wallet);
+        await this.props.getAnnouncements(this.props.wallet);
         this.setState({refreshing: false})
     }
 
@@ -72,7 +67,6 @@ class HomeScreen extends React.Component {
     render() {
         console.log('HomeScreen Render')
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
-        // console.log("Announcements Error: " + this.props.error)
         
         if (this.props.announcements.length === 0) {
             if (this.props.isLoading && this.state.refreshing) {
@@ -172,20 +166,5 @@ const styles = StyleSheet.create({
     extraSpacing: {
         paddingTop: 5,
         paddingBottom: 20
-    },
-    logo: {
-        width: 250,
-        height: 250
-    },
-    viewStyles: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'white'
-    },
-    textStyles: {
-        color: 'white',
-        fontSize: 40,
-        fontWeight: 'bold'
     }
 });

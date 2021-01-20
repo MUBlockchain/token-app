@@ -1,7 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { PricingCard } from 'react-native-elements';
-import QueryHandler from '../api/QueryHandler';
 import { Image } from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
 import { TouchableOpacity } from 'react-native';
@@ -9,18 +7,13 @@ import { connect } from 'react-redux';
 import { selectReward } from '../redux/actions/itemActions';
 
 class RewardProductComponent extends React.Component {
-    
-    purchaseItem = async () => {
-        console.log("Item Serial: " + this.props.serial);
-        // Add a Toast on screen.
-
-        var res = await QueryHandler.purchaseItem(this.props.serial, this.props.uniqueID, this.props.token);
-    }
 
     openReward = () => {
         //Might need to add a select reward to props
         this.props.selectReward(this.props.itemIndex);
+
         console.log("OPEN REWARD:", this.props)
+
         this.props.navigation.navigate('RewardsOverview',{
             title: this.props.title,
             description: this.props.description,
@@ -91,15 +84,6 @@ const styles = StyleSheet.create({
         width: 300,
         borderRadius: 5,
         alignItems: 'center'
-    },
-    info: {
-        marginLeft: 10,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        height: "100%"
-    },
-    dateText: {
-        fontSize: 14
     },
     content: {
         marginTop: 20,
