@@ -59,8 +59,8 @@ class RedeemScreen extends React.Component {
     }
 }
 
-
 export default RedeemScreen;
+
 
 
 const styles = StyleSheet.create({

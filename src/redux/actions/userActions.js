@@ -4,17 +4,25 @@ import {
     USER_FAILURE, 
     USER_TIMEOUT
 } from './constants';
-import QueryHandler from '../../api/QueryHandler';
+import "@ethersproject/shims/dist/index.js"
+import { ethers } from 'ethers'
+
+const Announcements = require('../../abi/Announcements.json');
 
 const userLoading = () => ({
     type: USER_LOADING
 })
 
-const userSuccess = (data, token, profilePic) => ({
+const userSuccess = (privateKey, publicAddress, wallet, email, name, profileImage, items, bounties) => ({
     type: USER_SUCCESS,
-    data,
-    token,
-    profilePic
+    privateKey,
+    publicAddress,
+    wallet,
+    email,
+    name,
+    profileImage,
+    items,
+    bounties
 })
 
 const userFailure = (error) => ({
@@ -26,21 +34,55 @@ const userTimeout = () => ({
     type : USER_TIMEOUT
 })
 
-export const getUserProfile = (uuid, token, profilePic) => async (dispatch) => {
-    dispatch(userLoading());
+export const saveUserInformation = (privateKey, publicAddress, wallet, email, name, profileImage) => (dispatch) => {
+    dispatch(userLoading())
+    
+    try {
+         /* =====  User getUser ==== */
+        //const userContract = new ethers.Contract(Users.networks[42].address, Users.abi, wallet)
+        //const user = await userContract.getUser(publicAddress);
 
-    //Do api call
-    var res = await QueryHandler.getUserProfile(uuid, token);
-    console.log("User Profile: " + JSON.stringify(res.data));
+        /* ===== Dummy User getUser Response ==== */
+        const user = {
+            "name": name,
+            "twitterId": "twitterId",
+            "imageUrl": "imageUrl",
+            "address": "address",
+            "balance": "balance",
+            "items": [ 1 ],
+            "bounties": [ 1 ]
+        }
 
-    if (!res) {
-        console.log("UserFailure...");
-        dispatch(userFailure(res.status));
-    } else if (res['status'] === 200) {
-        console.log("UserSuccess... Token: "+ profilePic);
-        dispatch(userSuccess(res.data, token, profilePic));
-    } else {
-        console.log("UserTimeout...");
-        dispatch(userTimeout());
+
+        /* console.log('FLAG 3')
+        //@dev
+        const role = await userContract.role(wallet.address)
+
+        console.log('FLAG 4 ROLE: ', role)
+        if (role.toNumber() == 0)
+            await userContract.enroll('Peter', 'petercooke5361', 'imageUrl')
+
+        console.log('FLAG 5')
+        */
+
+        dispatch(userSuccess(privateKey, publicAddress, wallet, email, name, profileImage, user.items, user.bounties));
+    } catch (e) {
+        console.log(e)
     }
+}
+
+export const createUserContract = wallet => async dispatch => {
+    dispatch(userLoading())
+
+    try {
+
+        const userContract = new ethers.Contract('0xD2d045e42603182f236f0c7cfD33bb7D743E2dcc', Users, wallet)
+        dispatch(userSuccess)
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+export const doesUserExist = publicAddress => async dispatch => {
+
 }

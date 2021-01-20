@@ -1,7 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { PricingCard } from 'react-native-elements';
-import QueryHandler from '../api/QueryHandler';
 import { Image } from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
 import { TouchableOpacity } from 'react-native';
@@ -9,22 +7,23 @@ import { connect } from 'react-redux';
 import { selectReward } from '../redux/actions/itemActions';
 
 class RewardProductComponent extends React.Component {
-    
-    purchaseItem = async () => {
-        console.log("Item Serial: " + this.props.serial);
-        // Add a Toast on screen.
-
-        var res = await QueryHandler.purchaseItem(this.props.serial, this.props.uniqueID, this.props.token);
-    }
 
     openReward = () => {
         //Might need to add a select reward to props
-        //this.props.selectReward(this.props.key, this.props.title, this.props.itemPic, this.props.price);
-        
+        this.props.selectReward(this.props.itemIndex);
+
+        console.log("OPEN REWARD:", this.props)
+
         this.props.navigation.navigate('RewardsOverview',{
             title: this.props.title,
-            price: this.props.price,
-            pic: this.props.pic
+            description: this.props.description,
+            imageUrl: this.props.imageUrl,
+            cost: this.props.cost,
+            infinite: this.props.infinite,
+            quantity: this.props.quantity,
+            active: this.props.active,
+            itemIndex: this.props.itemIndex,
+            isOwned: this.props.isOwned
         });
     }
 
@@ -49,19 +48,14 @@ class RewardProductComponent extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        selectedItem: state.itemReducer.selectedItem
-    }
-}
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        selectReward: (rewardId) => dispatch(selectReward(rewardId))
+        selectReward: (itemIndex) => dispatch(selectReward(itemIndex))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps) (RewardProductComponent);
+export default connect(null, mapDispatchToProps) (RewardProductComponent);
 
 const styles = StyleSheet.create({
     outerContainer: {
@@ -90,15 +84,6 @@ const styles = StyleSheet.create({
         width: 300,
         borderRadius: 5,
         alignItems: 'center'
-    },
-    info: {
-        marginLeft: 10,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        height: "100%"
-    },
-    dateText: {
-        fontSize: 14
     },
     content: {
         marginTop: 20,

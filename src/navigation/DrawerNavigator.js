@@ -9,7 +9,9 @@ import RedeemScreen from '../screens/RedeemScreen';
 import RewardsScreen from '../screens/RewardsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
+import RegisterScreen from '../screens/RegisterScreen';
 import RewardsOverviewScreen from '../screens/RewardsOverviewScreen'
+import BountiesScreen from '../screens/BountiesScreen'
 
 /**
  * Variables
@@ -23,7 +25,8 @@ const drawerWidth = width * 0.70;
 const HomeStack = createStackNavigator({
     Home: {
         screen: HomeScreen
-    }
+    },
+    path: 'home'
 });
 
 /*
@@ -43,6 +46,12 @@ const RewardsStack = createStackNavigator({
     }
 });
 
+const BountiesStack = createStackNavigator({
+    Bounties : {
+        screen: BountiesScreen
+    }
+})
+
 const ProfileStack = createStackNavigator({
     Profile: {
         screen: ProfileScreen
@@ -55,6 +64,12 @@ const LoginStack = createStackNavigator({
     }
 });
 
+const RegisterStack = createStackNavigator({
+    RegisterUser: {
+        screen: RegisterScreen
+    }
+});
+
 
 
 const DrawerNavigator = createDrawerNavigator({
@@ -64,6 +79,18 @@ const DrawerNavigator = createDrawerNavigator({
             drawerIcon: ({tintColor}) => 
                 <Icon 
                     name="home" 
+                    color={tintColor} 
+                    type="font-awesome" 
+                    size={24} 
+                />
+        }
+    },
+    Bounties: {
+        screen: BountiesStack,
+        navigationOptions: {
+            drawerIcon: ({tintColor}) => 
+                <Icon 
+                    name="map" 
                     color={tintColor} 
                     type="font-awesome" 
                     size={24} 
@@ -94,6 +121,9 @@ const DrawerNavigator = createDrawerNavigator({
                 />
         }
     },
+    RegisterUser: {
+        screen: RegisterStack,
+    }
     /*
     Redeem: {
         screen: RedeemStack,
