@@ -82,3 +82,7 @@ export const createUserContract = wallet => async dispatch => {
         console.log(e)
     }
 }
+
+export const doesUserExist = publicAddress => async dispatch => {
+
+}
