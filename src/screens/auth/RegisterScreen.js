@@ -3,7 +3,7 @@ import { BackHandler } from 'react-native';
 import { View, Text, TextInput, TouchableHighlight, StyleSheet } from 'react-native';
 import { SafeAreaView, withNavigation } from 'react-navigation';
 import { connect } from 'react-redux';
-import QueryHandler from '../api/QueryHandler';
+import QueryHandler from '../../api/QueryHandler';
 
 class RegisterScreen extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -13,6 +13,7 @@ class RegisterScreen extends React.Component {
             title: 'Register'
         };
     };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -38,29 +39,32 @@ class RegisterScreen extends React.Component {
     }
 
     register = async () => {
-        this.setState({loading: true})
-        this.setState({error: false})
+        this.setState({ loading: true })
+        this.setState({ error: false })
+
         try {
-        if (this.state.twitterName.indexOf('@') === -1) {
-            this.setState({invalid: true})
-            this.setState({loading: false})
-        } else {
-            this.setState({invalid: false})
-            const ret = await QueryHandler.getTwitterId(this.state.twitterName.substring(1))
-            const twitterid = ret.data
-        // await this.props.userContract.enroll(this.props.name, twitterid, this.props.image)
-        // this.props.navigation.navigate('Drawer')
-        } 
-        }
-        catch (err) {
-            if(err instanceof TypeError) {
-                this.setState({errorMessage: '*User does not exist. Enter valid username.'})
+            if (this.state.twitterName.indexOf('@') === -1) {
+                this.setState({ invalid: true })
+                this.setState({ loading: false })
             } else {
-                this.setState({errorMessage: '*Some other error occurred. Try again later'})
+                this.setState({ invalid: false })
+
+                const ret = await QueryHandler.getTwitterId(this.state.twitterName.substring(1))
+                const twitterid = ret.data
+
+                await this.props.userContract.enroll(this.props.name, twitterid, this.props.image)
+
+                this.props.navigation.navigate('Drawer');
             }
-            this.setState({error: true})
+        } catch (err) {
+            if (err instanceof TypeError) {
+                this.setState({ errorMessage: '*User does not exist. Enter valid username.' })
+            } else {
+                this.setState({ errorMessage: '*Some other error occurred. Try again later' })
+            }
+            this.setState({ error: true })
         } finally {
-            this.setState({loading: false})
+            this.setState({ loading: false })
         }
     }
 
@@ -85,8 +89,8 @@ class RegisterScreen extends React.Component {
                         value={this.state.twitter}
                     />
                 </View>
-                {this.state.invalid && <Text style={styles.error}>*Input must contain "@"</Text> }
-                {this.state.error && <Text style={styles.error}>{this.state.errorMessage}</Text> }
+                {this.state.invalid && <Text style={styles.error}>*Input must contain "@"</Text>}
+                {this.state.error && <Text style={styles.error}>{this.state.errorMessage}</Text>}
                 <View style={styles.inputRow}>
                     <Text>Image URL: </Text>
                     <TextInput
@@ -109,7 +113,7 @@ const mapStateToProps = (state) => {
     return {
         name: state.userReducer.name,
         image: state.userReducer.profilePic,
-        userContact: state.contractReducer.userContract
+        userContract: state.userReducer.userContract
     }
 }
 

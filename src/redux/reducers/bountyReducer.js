@@ -3,14 +3,16 @@ import { BOUNTY_LOADING, BOUNTY_SUCCESS, BOUNTY_FAILURE, BOUNTY_TIMEOUT, BOUNTY_
 
 const initBountyState = {
     isLoading: false,
-    pBounties: [],
-    npBounties: [],
-    bounties: [],
+    pendingBounties: [],
+    awardedBounties: [],
+    availableBounties: [],
+    allBounties: [],
     errorBack: false,
     error: '',
     placeholder: 'There are currenlty no bounties for you to purchase!',
     timeoutOccurred: false,
-    selectedItem: ''
+    selectedBounty: '',
+    bountyContract: ''
 }
 
 
@@ -30,9 +32,11 @@ const bountyReducer = (state = initBountyState, action) => {
                 isLoading: false,
                 errorBack: false,
                 timeoutOccurred: false,
-                pItems: action.pItems,
-                npItems: action.npItems,
-                items: action.allItems
+                pendingBounties: action.pendingBounties,
+                awardedBounties: action.awardedBounties,
+                availableBounties: action.availableBounties,
+                allBounties: action.allBounties,
+                bountyContract: action.bountyContract
             };
         case BOUNTY_FAILURE:
             return {
@@ -49,6 +53,11 @@ const bountyReducer = (state = initBountyState, action) => {
                 timeoutOccurred: true,
                 errorBack: true,
                 error: 'Connection Timeout to API'
+            };
+        case BOUNTY_SELECT:
+            return {
+                ...state,
+                selectedBounty: action.bountyIndex
             };
         default:
             return state;

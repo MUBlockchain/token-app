@@ -14,7 +14,8 @@ const initState = {
     bounties: [],
     imageUrl: 'https://lh3.googleusercontent.com/-bDdZL2tOyTI/AAAAAAAAAAI/AAAAAAAAAAA/AMZuuclbHP9e-0lGGlWhg7K89k3ntLDwXA/s96-c/photo.jpg',
     isLoading: false,
-    address: ''
+    address: '',
+    registerUser: false
 };
 
 const userReducer = (state = initState, action) => {
@@ -35,6 +36,8 @@ const userReducer = (state = initState, action) => {
                 profilePic: action.profileImage,
                 items: action.items,
                 bounties: action.bounties,
+                registerUser: action.registerUser,
+                userContract: action.userContract,
                 isLoading: false
             };
         case USER_FAILURE:

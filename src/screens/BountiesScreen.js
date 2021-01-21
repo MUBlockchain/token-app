@@ -3,11 +3,11 @@ import { BackHandler } from 'react-native';
 import { View, Text, ActivityIndicator, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { SafeAreaView, withNavigation } from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import RewardProductComponent from '../components/RewardProductComponent';
 import { connect } from 'react-redux';
-import { getItems } from '../redux/actions/itemActions'
+import { getBounties } from '../redux/actions/bountyActions'
 import { getUserProfile } from '../redux/actions/userActions';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import BountyComponent from '../components/BountyComponent';
 
 class BountiesScreen extends React.Component {
     constructor(props) {
@@ -20,7 +20,8 @@ class BountiesScreen extends React.Component {
             index: 0,
             routes: [
                 { key: 'first', title: 'Available' },
-                { key: 'second', title: 'Claimed' }
+                { key: 'second', title: 'Pending' },
+                { key: 'third', title: 'Awarded' },
             ]
         };
     }
@@ -58,8 +59,7 @@ class BountiesScreen extends React.Component {
     };
 
     async componentDidMount() {
-        await this.props.getBounties(this.props.wallet, this.props.purchasedBounties);
-        //await this.props.getUserProfile(this.props.uniqueID);
+        await this.props.getBounties(this.props.wallet, this.props.bounties);
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
@@ -74,35 +74,38 @@ class BountiesScreen extends React.Component {
 
     _onRefresh = async () => {
         this.setState({ refreshing: true });
-        await this.props.getBounties(this.props.wallet, this.props.purchasedBounties);
-        //await this.props.getUserProfile(this.props.uniqueID);
+        //await this.props.getBounties(this.props.wallet, this.props.purchasedBounties);
         this.setState({ refreshing: false });
     }
 
-    renderItems = (items) => {
+    renderBounties = (bounties) => {
         return (
             <View style={[styles.roleSection]}>
-                {this.renderItemsHelper(items)}
+                {this.renderBountiesHelper(bounties)}
             </View>
         );
     }
 
-    renderItemsHelper = (items) => {
-        return items.map((item, i) => {
-            return <RewardProductComponent
+    renderBountiesHelper = (bounties) => {
+        console.log('renderBountiesHelper: ', bounties)
+        return bounties.map((bounty, i) => {
+            return <BountyComponent
                 key={i}
-                title={item.description}
-                price={item.cost}
-                pic=""
-                serial={item.serial}
-                uniqueID={this.props.uniqueID}
-                token={this.props.token}
+                title={bounty.title}
+                description={bounty.description}
+                imageUrl={bounty.imageUrl}
+                awards={bounty.awards}
+                infinite={bounty.infinite}
+                quantity={bounty.quantity}
+                active={bounty.active}
+                bountyIndex={bounty.bountyIndex}
+                isAwarded={bounty.isAwarded}
                 navigation={this.props.navigation}
             />;
         });
     }
 
-    availableRewards = () => {
+    availableBounties = () => {
         return (
             <View style={styles.gridContainer}>
                 <ScrollView contentContainerStyle={[styles.gridContainer, styles.extraSpacing]}
@@ -113,14 +116,14 @@ class BountiesScreen extends React.Component {
                         />
                     }>
                     <View>
-                        {this.renderItems(this.props.npItems)}
+                        {this.renderBounties(this.props.availableBounties)}
                     </View>
                 </ScrollView>
             </View>
         );
     }
 
-    purchasedRewards = () => {
+    awardedBounties = () => {
         return (
             <View style={styles.gridContainer}>
                 <ScrollView contentContainerStyle={[styles.gridContainer, styles.extraSpacing]}
@@ -131,7 +134,25 @@ class BountiesScreen extends React.Component {
                         />
                     }>
                     <View>
-                        {this.renderItems(this.props.pItems)}
+                        {this.renderBounties(this.props.awardedBounties)}
+                    </View>
+                </ScrollView>
+            </View>
+        );
+    }
+
+    pendingBounties = () => {
+        return (
+            <View style={styles.gridContainer}>
+                <ScrollView contentContainerStyle={[styles.gridContainer, styles.extraSpacing]}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this._onRefresh}
+                        />
+                    }>
+                    <View>
+                        {this.renderBounties(this.props.pendingBounties)}
                     </View>
                 </ScrollView>
             </View>
@@ -140,9 +161,8 @@ class BountiesScreen extends React.Component {
 
     render() {
         if (this.timeoutOccurred) { ErrorHandler.connectionError(); }
-        // console.log("ITEMS Error: " + this.props.items.error)
-
-        if (this.props.bounties.length === 0) {
+        // console.log('Available Bounties: ', JSON.stringify(this.props.allBounties))
+        if (this.props.allBounties.length === 0) {
             if (this.props.isLoading && !this.state.refreshing) {
                 return (
                     <SafeAreaView style={styles.loadingContainer}>
@@ -172,8 +192,9 @@ class BountiesScreen extends React.Component {
                 <TabView
                     navigationState={this.state}
                     renderScene={SceneMap({
-                        first: this.availableRewards,
-                        second: this.purchasedRewards,
+                        first: this.availableBounties,
+                        second: this.pendingBounties,
+                        third: this.awardedBounties
                     })}
                     onIndexChange={this.handleIndexChange}
                     renderTabBar={this.renderTabBar}
@@ -192,17 +213,17 @@ const mapStateToProps = (state) => {
         error: state.bountyReducer.error,
         placeholder: state.bountyReducer.placeholder,
         timeoutOccurred: state.bountyReducer.timeoutOccurred,
-        npBounties: state.bountyReducer.npItems,
-        pBounties: state.bountyReducer.pItems,
-        bounties: state.bountyReducer.items,
-        wallet: state.userReducer.wallet,
-        purchasedBounties: state.userReducer.bounties
+        pendingBounties: state.bountyReducer.pendingBounties,
+        awardedBounties: state.bountyReducer.awardedBounties,
+        availableBounties: state.bountyReducer.availableBounties,
+        allBounties: state.bountyReducer.allBounties,
+        wallet: state.userReducer.wallet
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getBounties: (wallet, purchasedBounties) => dispatch(getItems(wallet, purchasedBounties)),
+        getBounties: (wallet, purchasedBounties) => dispatch(getBounties(wallet, purchasedBounties)),
         getUserProfile: (uuid, token) => dispatch(getUserProfile(uuid, token))
     }
 }

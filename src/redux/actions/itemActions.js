@@ -108,9 +108,15 @@ export const getItems = (wallet, purchased) => async (dispatch) => {
         var pItems = [];
         var npItems = [];
         var allItems = [];
-
+        console.log('Purchased: ', purchased)
         for (index = 0; index < items[1].length; index++) {
-            let isOwned = purchased.includes(index)
+            let isOwned;
+            
+            if (purchased === undefined) {
+                isOwned = false
+            } else {
+                isOwned = purchased.includes(index)
+            }
 
             var obj = {
                 title: items[1][index],

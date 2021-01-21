@@ -6,7 +6,7 @@ class QueryHandler {
     
     static getTwitterId(twitterName) {
         var instance = axios.create({
-            baseURL: 'http://192.168.0.113:8080/api/'
+            baseURL: 'https://app.mubc.io:8080/api/'
         });
 
         return instance.get('/twitterid', {

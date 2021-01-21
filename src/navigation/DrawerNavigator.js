@@ -9,9 +9,10 @@ import RedeemScreen from '../screens/RedeemScreen';
 import RewardsScreen from '../screens/RewardsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import LoginScreen from '../screens/auth/LoginScreen';
-import RegisterScreen from '../screens/RegisterScreen';
-import RewardsOverviewScreen from '../screens/RewardsOverviewScreen'
-import BountiesScreen from '../screens/BountiesScreen'
+import RegisterScreen from '../screens/auth/RegisterScreen';
+import RewardsOverviewScreen from '../screens/RewardsOverviewScreen';
+import BountiesScreen from '../screens/BountiesScreen';
+import BountiesOverviewScreen from '../screens/BountyOverviewScreen';
 
 /**
  * Variables
@@ -49,6 +50,9 @@ const RewardsStack = createStackNavigator({
 const BountiesStack = createStackNavigator({
     Bounties : {
         screen: BountiesScreen
+    },
+    BountiesOverview: {
+        screen: BountiesOverviewScreen
     }
 })
 
@@ -120,9 +124,6 @@ const DrawerNavigator = createDrawerNavigator({
                     size={24} 
                 />
         }
-    },
-    RegisterUser: {
-        screen: RegisterStack,
     }
     /*
     Redeem: {

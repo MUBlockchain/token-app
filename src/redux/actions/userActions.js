@@ -7,13 +7,13 @@ import {
 import "@ethersproject/shims/dist/index.js"
 import { ethers } from 'ethers'
 
-const Announcements = require('../../abi/Announcements.json');
+const Users = require('../../abi/Users.json');
 
 const userLoading = () => ({
     type: USER_LOADING
 })
 
-const userSuccess = (privateKey, publicAddress, wallet, email, name, profileImage, items, bounties) => ({
+const userSuccess = (privateKey, publicAddress, wallet, email, name, profileImage, items, bounties, registerUser, userContract) => ({
     type: USER_SUCCESS,
     privateKey,
     publicAddress,
@@ -22,7 +22,9 @@ const userSuccess = (privateKey, publicAddress, wallet, email, name, profileImag
     name,
     profileImage,
     items,
-    bounties
+    bounties,
+    registerUser,
+    userContract
 })
 
 const userFailure = (error) => ({
@@ -34,15 +36,16 @@ const userTimeout = () => ({
     type : USER_TIMEOUT
 })
 
-export const saveUserInformation = (privateKey, publicAddress, wallet, email, name, profileImage) => (dispatch) => {
+export const saveUserInformation = (privateKey, publicAddress, wallet, email, name, profileImage) => async (dispatch) => {
     dispatch(userLoading())
     
     try {
          /* =====  User getUser ==== */
-        //const userContract = new ethers.Contract(Users.networks[42].address, Users.abi, wallet)
-        //const user = await userContract.getUser(publicAddress);
+        const userContract = new ethers.Contract(Users.networks[42].address, Users.abi, wallet)
+        const user = await userContract.getUser(publicAddress);
 
         /* ===== Dummy User getUser Response ==== */
+        /*
         const user = {
             "name": name,
             "twitterId": "twitterId",
@@ -52,22 +55,19 @@ export const saveUserInformation = (privateKey, publicAddress, wallet, email, na
             "items": [ 1 ],
             "bounties": [ 1 ]
         }
-
-
-        /* console.log('FLAG 3')
-        //@dev
-        const role = await userContract.role(wallet.address)
-
-        console.log('FLAG 4 ROLE: ', role)
-        if (role.toNumber() == 0)
-            await userContract.enroll('Peter', 'petercooke5361', 'imageUrl')
-
-        console.log('FLAG 5')
         */
 
-        dispatch(userSuccess(privateKey, publicAddress, wallet, email, name, profileImage, user.items, user.bounties));
+        let exists = await userContract.role(publicAddress)
+        exists = exists.toNumber()
+        
+        let registerUser = false;
+        if (!exists) {
+            registerUser = true;
+        }
+
+        dispatch(userSuccess(privateKey, publicAddress, wallet, email, name, profileImage, user.items, user.bounties, registerUser, userContract));
     } catch (e) {
-        console.log(e)
+        console.log('userAction Error: ', e)
     }
 }
 
