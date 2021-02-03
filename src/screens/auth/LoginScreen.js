@@ -39,8 +39,7 @@ class LoginScreen extends React.Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         RNTorusDirectSdk.init({
             browserRedirectUri: BROWSER_REDIRECT,
-            network: "testnet",  // details for test net
-            proxyContractAddress: "0x4023d2a0D330bF11426B12C6144Cfb96B7fa6183"
+            enableLogging: true
         })
     }
 
