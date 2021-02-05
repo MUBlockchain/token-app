@@ -15,8 +15,24 @@ class QueryHandler {
             }
         })
             .catch(function (error) {
-                console.log('In error')
-                console.log(error);
+                console.log('getTwitterId Error', error)
+            });
+    }
+
+    static signIn(publicKey, idToken) {
+        console.log("FLAG")
+        var instance = axios.create({
+            baseURL: 'https://app.mubc.io:8080/api/',
+            //headers: { 'X-Address': publicKey }
+        });
+
+        return instance.get('/signin', {
+            params: {
+                token: idToken
+            }
+        })
+            .catch(function (error) {
+                console.log('SignIn Error', error)
             });
     }
 }

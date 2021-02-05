@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { saveUserInformation } from '../../redux/actions/userActions';
 import RNTorusDirectSdk from '@toruslabs/torus-direct-react-native-sdk';
 import { ETHERSCAN, INFURA, ALCHEMY, CLIENT_ID, VERIFIER, BROWSER_REDIRECT } from '@env'
+import QueryHandler from '../../api/QueryHandler'
 
 class LoginScreen extends React.Component {
 
@@ -38,8 +39,7 @@ class LoginScreen extends React.Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         RNTorusDirectSdk.init({
             browserRedirectUri: BROWSER_REDIRECT,
-            network: "testnet",  // details for test net
-            proxyContractAddress: "0x4023d2a0D330bF11426B12C6144Cfb96B7fa6183"
+            enableLogging: true
         })
     }
 
@@ -56,27 +56,31 @@ class LoginScreen extends React.Component {
         try {
             // this.setState({ refreshing: true });
             
-            /*
+            
             const loginDetails = await RNTorusDirectSdk.triggerLogin({
                 typeOfLogin: 'google',
                 verifier: VERIFIER,
                 clientId: CLIENT_ID,
             });
             /* ===== User Info ==== */
-            /*
+            
             const { privateKey, publicAddress, userInfo } = loginDetails
-            const { email, name, profileImage } = userInfo
+            const { email, name, profileImage, idToken } = userInfo
 
             console.log('PRIVATE KEY: ', privateKey)
             console.log('PUBLIC ADDRESS: ', publicAddress)
             console.log('EMAIL: ', email)
             console.log('NAME: ', name)
             console.log('PROFILE IMAGE: ', profileImage)
-            */
+            console.log('ID TOKEN: ', idToken)
             
-            /* ===== Dummy User Info ==== */
+            const signIn = await QueryHandler.signIn(publicAddress, idToken)
+            console.log('SignIn Result', signIn)
+            
+            /* ===== Dummy User Info ==== 
             const privateKey = 'ef75f981a22449c11633d7b5bd777bf290df125e172f84d4af84747801c00758', publicAddress = '0x48f06A6e2D876A2d41eCe3544069aA2d53D8847A', userInfo = 'userInfo'
             const email = 'cookepf@miamioh.edu', name = 'Peter', profileImage = 'profilePic'
+            */
 
             /* =====  Wallet Info ==== */
             const provider = ethers.getDefaultProvider('kovan', {

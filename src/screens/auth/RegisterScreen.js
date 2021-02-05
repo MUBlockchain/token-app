@@ -51,9 +51,11 @@ class RegisterScreen extends React.Component {
 
                 const ret = await QueryHandler.getTwitterId(this.state.twitterName.substring(1))
                 const twitterid = ret.data
+                
+                console.log('FLAG 1', this.props.name, twitterid, this.props.image, this.props.userContract)
 
                 await this.props.userContract.enroll(this.props.name, twitterid, this.props.image)
-
+                console.log('FLAG 2')
                 this.props.navigation.navigate('Drawer');
             }
         } catch (err) {
@@ -61,6 +63,7 @@ class RegisterScreen extends React.Component {
                 this.setState({ errorMessage: '*User does not exist. Enter valid username.' })
             } else {
                 this.setState({ errorMessage: '*Some other error occurred. Try again later' })
+                console.log(err)
             }
             this.setState({ error: true })
         } finally {
